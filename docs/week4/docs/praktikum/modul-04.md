@@ -2,7 +2,7 @@
 
 Nama/NIM : Gionaldo Candrawansah / 1052224031  
 Repositori Lama : https://github.com/GionaldoCandr/Pratikum_Pengembangan_Aplikasi_Web  
-Repositori Baru : 
+Repositori Baru : https://github.com/GionaldoCandr/web-password-stealth-vault
 Versi Next.js dan mode Cache Components (aktif/tidak) : Next.js 16.3.6 / Tidak aktif (cacheComponents: false/default)
 
 ---
