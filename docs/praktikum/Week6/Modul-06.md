@@ -196,8 +196,7 @@ Foreign-key constraints:
 
 > **Tangkapan Layar Struktur Tabel psql:**
 > 
-> <!-- TANGKAP LAYAR HASIL PSQL \d DISINI -->
-> ![Tangkapan Layar psql AuditLog](image-psql.png)
+> ![styurktu-audit](image.png)
 
 ---
 
@@ -223,8 +222,7 @@ Jika entri sudah ada di basis data, Prisma mengeksekusi blok `update: {}` tanpa 
 
 > **Tangkapan Layar Eksekusi Seed Dua Kali:**
 > 
-> <!-- TANGKAP LAYAR SEED DUA KALI DISINI -->
-> ![Tangkapan Layar npx prisma db seed](image-seed.png)
+> <![npx-seed-duakali](image-1.png)
 
 ---
 
@@ -249,18 +247,6 @@ Jika entri sudah ada di basis data, Prisma mengeksekusi blok `update: {}` tanpa 
 | **VaultCredential** | Delete | `app/vault/actions.ts` (`hapusCredential`) | `prisma.$transaction([auditLog.deleteMany, vaultCredential.delete])` | Menghapus log audit terkait terlebih dahulu, kemudian menghapus kredensial secara atomik, dilanjutkan `redirect("/vault")`. |
 | **AuditLog** | Create | `app/vault/audit-actions.ts` (`tambahAuditLog`) | `prisma.auditLog.create` | Menangkap `P2002` $\rightarrow$ `{ deviceId: ["Perangkat ini sudah memiliki catatan audit pada kredensial ini"] }`, dan `P2003` $\rightarrow$ `{ pesan: "Kredensial tidak ditemukan." }`. |
 | **AuditLog** | Delete | `app/vault/audit-actions.ts` (`hapusAuditLog`) | `prisma.auditLog.deleteMany` | `where: { id, credentialId }` memastikan log audit hanya terhapus dari konteks kredensial yang tepat. |
-
----
-
-### B. Tangkapan Layar Pesan Galat P2002 dan P2025 di Formulir
-Pesan galat Prisma diterjemahkan secara elegan menjadi pesan antarmuka tanpa mengekspos struktur tabel internal:
-- **P2002 (Duplikasi Layanan):** Menampilkan pesan *"Layanan (service) sudah terdaftar dalam brankas"* di bawah field formulir.
-- **P2025 (Kredensial Hilang/Terhapus):** Menampilkan pesan banner *"Kredensial tidak ditemukan atau sudah dihapus dari brankas"* pada formulir ubah.
-
-> **Tangkapan Layar Galat Formulir:**
-> 
-> <!-- TANGKAP LAYAR PESAN GALAT P2002 DAN P2025 DISINI -->
-> ![Pesan Galat P2002 dan P2025](image-crud-error.png)
 
 ---
 
@@ -307,8 +293,7 @@ Perintah pertama (`deleteMany`) yang sempat berjalan di memori transaksi langsun
 
 > **Tangkapan Layar Bukti Rollback:**
 > 
-> <!-- TANGKAP LAYAR BUKTI TRANSAKSI DAN ROLLBACK DISINI -->
-> ![Bukti Rollback Transaksi](image-rollback.png)
+> ![skenaio-rollback](image-2.png)
 
 ---
 
