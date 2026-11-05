@@ -38,10 +38,20 @@ export const skemaCommandRun = z.object({
 
 export type MasukanCommandRun = z.infer<typeof skemaCommandRun>;
 
-// ==========================================
-// Skema Modul 6 (Stealth Password Vault)
-// ==========================================
+// Skema Validasi Form Tambah Credential Simulasi
+export const skemaCredential = z.object({
+  service: z
+    .string()
+    .trim()
+    .min(3, "Nama layanan minimal 3 karakter")
+    .max(50, "Nama layanan maksimal 50 karakter"),
+  username: z.string().trim().min(3, "Username/Email minimal 3 karakter"),
+  secret: z.string().min(8, "Password minimal 8 karakter"),
+});
 
+export type MasukanCredential = z.infer<typeof skemaCredential>;
+
+// Skema Validasi Produk: Stealth Password Vault (Modul 6 PostgreSQL & Prisma)
 export const skemaVaultCredential = z.object({
   service: z
     .string()
@@ -49,14 +59,13 @@ export const skemaVaultCredential = z.object({
     .min(3, "Nama layanan minimal 3 karakter")
     .max(100, "Nama layanan maksimal 100 karakter"),
   category: z.enum(["campus", "finance", "work", "social"]),
-  username: z.string().trim().min(3, "Username/Email minimal 3 karakter"),
-  encryptedSecret: z.string().min(8, "Password / Ciphertext minimal 8 karakter"),
+  username: z.string().trim().min(3, "Username minimal 3 karakter"),
+  encryptedSecret: z.string().min(8, "Ciphertext minimal 8 karakter"),
   isActive: z.boolean().default(true),
   notes: z.string().optional(),
 });
 
 export type MasukanVaultCredential = z.infer<typeof skemaVaultCredential>;
-export const skemaItem = skemaVaultCredential; // Alias kompatibilitas
 
 export const skemaAuditLog = z.object({
   deviceId: z
@@ -74,17 +83,3 @@ export const skemaAuditLog = z.object({
 });
 
 export type MasukanAuditLog = z.infer<typeof skemaAuditLog>;
-export const skemaUlasan = skemaAuditLog; // Alias kompatibilitas
-
-// Form Kredensial Umum (Simulasi Sederhana)
-export const skemaCredential = z.object({
-  service: z
-    .string()
-    .trim()
-    .min(3, "Nama layanan minimal 3 karakter")
-    .max(50, "Nama layanan maksimal 50 karakter"),
-  username: z.string().trim().min(3, "Username/Email minimal 3 karakter"),
-  secret: z.string().min(8, "Password minimal 8 karakter"),
-});
-
-export type MasukanCredential = z.infer<typeof skemaCredential>;

@@ -13,7 +13,7 @@ Salin teks di bawah ini ke dalam kolom teks daring penyerahan tugas pada e-learn
 - **Produk:** Stealth Password Vault — Zero-Disk Credential Management & Lab Hub  
 - **Cabang Git:** `main`  
 - **Tautan Repositori Dokumen Teknis di GitHub:**  
-  https://github.com/GionaldoCandr/web-password-stealth-vault/blob/main/docs/praktikum/modul-06.md  
+  https://github.com/GionaldoCandr/web-password-stealth-vault/blob/main/docs/praktikum/Week6/modul-06.md  
 
 ---
 
@@ -41,3 +41,4 @@ Salin teks di bawah ini ke dalam kolom teks daring penyerahan tugas pada e-learn
 
 4. **Pencatatan Pemanfaatan AI (15%):**
    - Transparansi lengkap: alat bantu (Antigravity AI / Google Deepmind), rincian prompt perintah utama, bagian modul yang diadopsi, serta 4 tahapan cara verifikasi teknis (`tsc --noEmit`, verifikasi `psql`, uji seed berulang, dan uji transaksi rollback).
+
