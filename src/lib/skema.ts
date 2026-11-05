@@ -50,3 +50,37 @@ export const skemaCredential = z.object({
 });
 
 export type MasukanCredential = z.infer<typeof skemaCredential>;
+
+// ==========================================
+// Skema Modul 6 (PostgreSQL & Prisma 7)
+// ==========================================
+
+export const skemaItem = z.object({
+  judul: z
+    .string()
+    .trim()
+    .min(3, "Judul minimal 3 karakter")
+    .max(100, "Judul maksimal 100 karakter"),
+  kategori: z.enum(["energi", "lingkungan", "kampus"]),
+  deskripsi: z.string().trim().min(5, "Deskripsi minimal 5 karakter"),
+  tersedia: z.boolean(),
+  gambar: z.string().optional(),
+});
+
+export type MasukanItem = z.infer<typeof skemaItem>;
+
+export const skemaUlasan = z.object({
+  nama: z
+    .string()
+    .trim()
+    .min(2, "Nama minimal 2 karakter")
+    .max(60, "Nama maksimal 60 karakter"),
+  nilai: z.coerce.number().int().min(1, "Nilai minimal 1").max(5, "Nilai maksimal 5"),
+  komentar: z
+    .string()
+    .trim()
+    .min(5, "Komentar minimal 5 karakter")
+    .max(500, "Komentar maksimal 500 karakter"),
+});
+
+export type MasukanUlasan = z.infer<typeof skemaUlasan>;
