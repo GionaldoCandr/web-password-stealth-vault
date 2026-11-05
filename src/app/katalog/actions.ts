@@ -5,57 +5,61 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { skemaItem } from "@/lib/skema";
+import { skemaVaultCredential } from "@/lib/skema";
 import type { StatusForm } from "@/lib/status-form";
 
-function bacaForm(formData: FormData) {
-  return skemaItem.safeParse({
+function bacaFormCredential(formData: FormData) {
+  return skemaVaultCredential.safeParse({
     ...Object.fromEntries(formData),
-    tersedia: formData.get("tersedia") === "on",
+    isActive: formData.get("isActive") === "on" || formData.get("tersedia") === "on",
   });
 }
 
-export async function tambahItem(
+export async function tambahCredential(
   _prev: StatusForm,
   formData: FormData
 ): Promise<StatusForm> {
-  const hasil = bacaForm(formData);
+  const hasil = bacaFormCredential(formData);
   if (!hasil.success) {
     return { galat: z.flattenError(hasil.error).fieldErrors };
   }
 
   try {
-    await prisma.item.create({ data: hasil.data });
+    await prisma.vaultCredential.create({ data: hasil.data });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
-      return { galat: { judul: ["Judul item sudah terdaftar"] } };
+      return { galat: { service: ["Layanan (service) sudah terdaftar dalam brankas"] } };
     }
     throw e;
   }
 
   revalidatePath("/katalog");
-  return { pesan: "Item tersimpan." };
+  revalidatePath("/vault");
+  return { pesan: "Kredensial berhasil disimpan di brankas." };
 }
 
-export async function ubahItem(
+// Alias kompatibilitas
+export const tambahItem = tambahCredential;
+
+export async function ubahCredential(
   id: number,
   _prev: StatusForm,
   formData: FormData
 ): Promise<StatusForm> {
-  const hasil = bacaForm(formData);
+  const hasil = bacaFormCredential(formData);
   if (!hasil.success) {
     return { galat: z.flattenError(hasil.error).fieldErrors };
   }
 
   try {
-    await prisma.item.update({ where: { id }, data: hasil.data });
+    await prisma.vaultCredential.update({ where: { id }, data: hasil.data });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return { galat: { judul: ["Judul item sudah terdaftar"] } };
+        return { galat: { service: ["Layanan (service) sudah terdaftar dalam brankas"] } };
       }
       if (e.code === "P2025") {
-        return { pesan: "Item tidak ditemukan atau sudah dihapus." };
+        return { pesan: "Kredensial tidak ditemukan atau sudah dihapus dari brankas." };
       }
     }
     throw e;
@@ -63,16 +67,24 @@ export async function ubahItem(
 
   revalidatePath("/katalog");
   revalidatePath(`/katalog/${id}`);
-  return { pesan: "Perubahan disimpan." };
+  revalidatePath("/vault");
+  return { pesan: "Perubahan kredensial berhasil disimpan." };
 }
 
-export async function hapusItem(id: number) {
-  // Transaksi atomik: hapus ulasan terkait terlebih dahulu, baru hapus item
+// Alias kompatibilitas
+export const ubahItem = ubahCredential;
+
+export async function hapusCredential(id: number) {
+  // Transaksi atomik: hapus seluruh AuditLog terlebih dahulu, lalu hapus VaultCredential
   await prisma.$transaction([
-    prisma.ulasan.deleteMany({ where: { itemId: id } }),
-    prisma.item.delete({ where: { id } }),
+    prisma.auditLog.deleteMany({ where: { credentialId: id } }),
+    prisma.vaultCredential.delete({ where: { id } }),
   ]);
 
   revalidatePath("/katalog");
+  revalidatePath("/vault");
   redirect("/katalog");
 }
+
+// Alias kompatibilitas
+export const hapusItem = hapusCredential;

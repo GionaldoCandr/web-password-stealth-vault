@@ -4,42 +4,50 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { skemaUlasan } from "@/lib/skema";
+import { skemaAuditLog } from "@/lib/skema";
 import type { StatusForm } from "@/lib/status-form";
 
-export async function tambahUlasan(
-  itemId: number,
+export async function tambahAuditLog(
+  credentialId: number,
   _prev: StatusForm,
   formData: FormData
 ): Promise<StatusForm> {
-  const hasil = skemaUlasan.safeParse(Object.fromEntries(formData));
+  const hasil = skemaAuditLog.safeParse(Object.fromEntries(formData));
   if (!hasil.success) {
     return { galat: z.flattenError(hasil.error).fieldErrors };
   }
 
   try {
-    await prisma.ulasan.create({
-      data: { ...hasil.data, itemId },
+    await prisma.auditLog.create({
+      data: { ...hasil.data, credentialId },
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return { galat: { nama: ["Nama ini sudah mengulas item ini"] } };
+        return { galat: { deviceId: ["Perangkat ini sudah memiliki catatan audit pada kredensial ini"] } };
       }
       if (e.code === "P2003") {
-        return { pesan: "Item tidak ditemukan." };
+        return { pesan: "Kredensial tidak ditemukan dalam brankas." };
       }
     }
     throw e;
   }
 
-  revalidatePath(`/katalog/${itemId}`);
-  return { pesan: "Ulasan tersimpan." };
+  revalidatePath(`/katalog/${credentialId}`);
+  revalidatePath(`/vault/${credentialId}`);
+  return { pesan: "Catatan audit berhasil ditambahkan." };
 }
 
-export async function hapusUlasan(id: number, itemId: number) {
-  await prisma.ulasan.deleteMany({
-    where: { id, itemId },
+// Alias kompatibilitas
+export const tambahUlasan = tambahAuditLog;
+
+export async function hapusAuditLog(id: number, credentialId: number) {
+  await prisma.auditLog.deleteMany({
+    where: { id, credentialId },
   });
-  revalidatePath(`/katalog/${itemId}`);
+  revalidatePath(`/katalog/${credentialId}`);
+  revalidatePath(`/vault/${credentialId}`);
 }
+
+// Alias kompatibilitas
+export const hapusUlasan = hapusAuditLog;

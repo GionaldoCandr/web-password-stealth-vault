@@ -1,36 +1,40 @@
 -- CreateEnum
-CREATE TYPE "Kategori" AS ENUM ('energi', 'lingkungan', 'kampus');
+CREATE TYPE "VaultCategory" AS ENUM ('campus', 'finance', 'work', 'social');
 
 -- CreateTable
-CREATE TABLE "Item" (
+CREATE TABLE "VaultCredential" (
     "id" SERIAL NOT NULL,
-    "judul" TEXT NOT NULL,
-    "kategori" "Kategori" NOT NULL,
-    "deskripsi" TEXT NOT NULL,
-    "tersedia" BOOLEAN NOT NULL DEFAULT true,
-    "gambar" TEXT,
-    "dibuatPada" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "service" TEXT NOT NULL,
+    "category" "VaultCategory" NOT NULL,
+    "username" TEXT NOT NULL,
+    "encryptedSecret" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "notes" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "VaultCredential_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Ulasan" (
+CREATE TABLE "AuditLog" (
     "id" SERIAL NOT NULL,
-    "nama" TEXT NOT NULL,
-    "nilai" INTEGER NOT NULL,
-    "komentar" TEXT NOT NULL,
-    "dibuatPada" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "itemId" INTEGER NOT NULL,
+    "deviceId" TEXT NOT NULL,
+    "action" TEXT NOT NULL,
+    "securityRate" INTEGER NOT NULL,
+    "details" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "credentialId" INTEGER NOT NULL,
 
-    CONSTRAINT "Ulasan_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "AuditLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Item_judul_key" ON "Item"("judul");
+CREATE UNIQUE INDEX "VaultCredential_service_key" ON "VaultCredential"("service");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Ulasan_itemId_nama_key" ON "Ulasan"("itemId", "nama");
+CREATE UNIQUE INDEX "AuditLog_credentialId_deviceId_key" ON "AuditLog"("credentialId", "deviceId");
 
 -- AddForeignKey
-ALTER TABLE "Ulasan" ADD CONSTRAINT "Ulasan_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Item"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AuditLog" ADD CONSTRAINT "AuditLog_credentialId_fkey" 
+FOREIGN KEY ("credentialId") REFERENCES "VaultCredential"("id") 
+ON DELETE RESTRICT ON UPDATE CASCADE;

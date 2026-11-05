@@ -9,25 +9,35 @@ const prisma = new PrismaClient({
 
 async function main() {
   for (const data of dataAwal) {
-    const item = await prisma.item.upsert({
-      where: { judul: data.judul },
+    // 1. Upsert VaultCredential (idempotent berdasarkan service unik)
+    const credential = await prisma.vaultCredential.upsert({
+      where: { service: data.service },
       update: {},
       create: data,
     });
-    await prisma.ulasan.upsert({
-      where: { itemId_nama: { itemId: item.id, nama: "Pengguna Uji" } },
+
+    // 2. Upsert AuditLog terkait (idempotent berdasarkan credentialId & deviceId)
+    await prisma.auditLog.upsert({
+      where: {
+        credentialId_deviceId: {
+          credentialId: credential.id,
+          deviceId: "PC-STEALTH-MASTER-01",
+        },
+      },
       update: {},
       create: {
-        itemId: item.id,
-        nama: "Pengguna Uji",
-        nilai: 4,
-        komentar: "Ulasan sintetis untuk pengujian.",
+        credentialId: credential.id,
+        deviceId: "PC-STEALTH-MASTER-01",
+        action: "PROVISION_SEED",
+        securityRate: 5,
+        details: "Audit awal integritas enkripsi kredensial AES-256-GCM valid.",
       },
     });
   }
-  const jItem = await prisma.item.count();
-  const jUlasan = await prisma.ulasan.count();
-  console.log(`Seed selesai: ${jItem} item, ${jUlasan} ulasan`);
+
+  const totalCredential = await prisma.vaultCredential.count();
+  const totalAudit = await prisma.auditLog.count();
+  console.log(`Seed selesai: ${totalCredential} item kredensial, ${totalAudit} audit log`);
 }
 
 main()

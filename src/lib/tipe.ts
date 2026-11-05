@@ -1,22 +1,28 @@
-// Definisi Tipe Data Modul 6 (PostgreSQL & Prisma 7)
-export type Kategori = "energi" | "lingkungan" | "kampus";
+// Definisi Tipe Data Produk: Stealth Password Vault (PostgreSQL & Prisma 7)
 
-export type Item = {
-  id: number;
-  judul: string;
-  kategori: Kategori;
-  deskripsi: string;
-  tersedia: boolean;
-  gambar: string | null;
-  dibuatPada?: Date;
-  ulasan?: Ulasan[];
-};
+export type VaultCategory = "campus" | "finance" | "work" | "social";
+export type Kategori = VaultCategory; // Alias kompatibilitas
 
-export type Ulasan = {
+export type VaultCredential = {
   id: number;
-  nama: string;
-  nilai: number;
-  komentar: string;
-  dibuatPada?: Date;
-  itemId: number;
+  service: string;
+  category: VaultCategory;
+  username: string;
+  encryptedSecret: string;
+  isActive: boolean;
+  notes: string | null;
+  createdAt?: Date;
+  auditLogs?: AuditLog[];
 };
+export type Item = VaultCredential; // Alias kompatibilitas
+
+export type AuditLog = {
+  id: number;
+  deviceId: string;
+  action: string;
+  securityRate: number;
+  details: string;
+  createdAt?: Date;
+  credentialId: number;
+};
+export type Ulasan = AuditLog; // Alias kompatibilitas

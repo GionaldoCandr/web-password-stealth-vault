@@ -38,7 +38,45 @@ export const skemaCommandRun = z.object({
 
 export type MasukanCommandRun = z.infer<typeof skemaCommandRun>;
 
-// Skema Validasi Form Tambah Credential Simulasi
+// ==========================================
+// Skema Modul 6 (Stealth Password Vault)
+// ==========================================
+
+export const skemaVaultCredential = z.object({
+  service: z
+    .string()
+    .trim()
+    .min(3, "Nama layanan minimal 3 karakter")
+    .max(100, "Nama layanan maksimal 100 karakter"),
+  category: z.enum(["campus", "finance", "work", "social"]),
+  username: z.string().trim().min(3, "Username/Email minimal 3 karakter"),
+  encryptedSecret: z.string().min(8, "Password / Ciphertext minimal 8 karakter"),
+  isActive: z.boolean().default(true),
+  notes: z.string().optional(),
+});
+
+export type MasukanVaultCredential = z.infer<typeof skemaVaultCredential>;
+export const skemaItem = skemaVaultCredential; // Alias kompatibilitas
+
+export const skemaAuditLog = z.object({
+  deviceId: z
+    .string()
+    .trim()
+    .min(3, "ID perangkat minimal 3 karakter")
+    .max(50, "ID perangkat maksimal 50 karakter"),
+  action: z.string().trim().min(2, "Aksi audit minimal 2 karakter"),
+  securityRate: z.coerce.number().int().min(1, "Nilai minimal 1").max(5, "Nilai maksimal 5"),
+  details: z
+    .string()
+    .trim()
+    .min(5, "Catatan audit minimal 5 karakter")
+    .max(500, "Catatan audit maksimal 500 karakter"),
+});
+
+export type MasukanAuditLog = z.infer<typeof skemaAuditLog>;
+export const skemaUlasan = skemaAuditLog; // Alias kompatibilitas
+
+// Form Kredensial Umum (Simulasi Sederhana)
 export const skemaCredential = z.object({
   service: z
     .string()
@@ -50,37 +88,3 @@ export const skemaCredential = z.object({
 });
 
 export type MasukanCredential = z.infer<typeof skemaCredential>;
-
-// ==========================================
-// Skema Modul 6 (PostgreSQL & Prisma 7)
-// ==========================================
-
-export const skemaItem = z.object({
-  judul: z
-    .string()
-    .trim()
-    .min(3, "Judul minimal 3 karakter")
-    .max(100, "Judul maksimal 100 karakter"),
-  kategori: z.enum(["energi", "lingkungan", "kampus"]),
-  deskripsi: z.string().trim().min(5, "Deskripsi minimal 5 karakter"),
-  tersedia: z.boolean(),
-  gambar: z.string().optional(),
-});
-
-export type MasukanItem = z.infer<typeof skemaItem>;
-
-export const skemaUlasan = z.object({
-  nama: z
-    .string()
-    .trim()
-    .min(2, "Nama minimal 2 karakter")
-    .max(60, "Nama maksimal 60 karakter"),
-  nilai: z.coerce.number().int().min(1, "Nilai minimal 1").max(5, "Nilai maksimal 5"),
-  komentar: z
-    .string()
-    .trim()
-    .min(5, "Komentar minimal 5 karakter")
-    .max(500, "Komentar maksimal 500 karakter"),
-});
-
-export type MasukanUlasan = z.infer<typeof skemaUlasan>;

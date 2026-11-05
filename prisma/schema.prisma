@@ -1,4 +1,5 @@
 // Skema Basis Data PostgreSQL & Prisma ORM 7
+// Produk: Stealth Password Vault (web-password-stealth-vault)
 // Modul 6 Praktikum Pengembangan Aplikasi Web
 // Mahasiswa: Gionaldo Chandrawansah (105224031)
 
@@ -11,31 +12,34 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Kategori {
-  energi
-  lingkungan
-  kampus
+enum VaultCategory {
+  campus
+  finance
+  work
+  social
 }
 
-model Item {
-  id         Int       @id @default(autoincrement())
-  judul      String    @unique
-  kategori   Kategori
-  deskripsi  String
-  tersedia   Boolean   @default(true)
-  gambar     String?
-  dibuatPada DateTime  @default(now())
-  ulasan     Ulasan[]
+model VaultCredential {
+  id              Int           @id @default(autoincrement())
+  service         String        @unique
+  category        VaultCategory
+  username        String
+  encryptedSecret String
+  isActive        Boolean       @default(true)
+  notes           String?
+  createdAt       DateTime      @default(now())
+  auditLogs       AuditLog[]
 }
 
-model Ulasan {
-  id         Int      @id @default(autoincrement())
-  nama       String
-  nilai      Int
-  komentar   String
-  dibuatPada DateTime @default(now())
-  itemId     Int
-  item       Item     @relation(fields: [itemId], references: [id], onDelete: Restrict)
+model AuditLog {
+  id           Int             @id @default(autoincrement())
+  deviceId     String
+  action       String
+  securityRate Int
+  details      String
+  createdAt    DateTime        @default(now())
+  credentialId Int
+  credential   VaultCredential @relation(fields: [credentialId], references: [id], onDelete: Restrict)
 
-  @@unique([itemId, nama])
+  @@unique([credentialId, deviceId])
 }

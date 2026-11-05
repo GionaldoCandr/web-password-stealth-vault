@@ -1,32 +1,47 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
-import type { Item } from "@/lib/tipe";
+import type { VaultCredential } from "@/lib/tipe";
 
-const kolomItem = {
+const kolomCredential = {
   id: true,
-  judul: true,
-  kategori: true,
-  deskripsi: true,
-  tersedia: true,
-  gambar: true,
+  service: true,
+  category: true,
+  username: true,
+  encryptedSecret: true,
+  isActive: true,
+  notes: true,
+  createdAt: true,
 } as const;
 
-export async function ambilDaftarItem(): Promise<Item[]> {
-  return prisma.item.findMany({
-    select: kolomItem,
-    orderBy: { dibuatPada: "desc" },
+export async function ambilDaftarCredential(): Promise<VaultCredential[]> {
+  return prisma.vaultCredential.findMany({
+    select: kolomCredential,
+    orderBy: { createdAt: "desc" },
   });
 }
 
-export async function ambilItem(id: number) {
-  return prisma.item.findUnique({
+// Alias kompatibilitas
+export const ambilDaftarItem = ambilDaftarCredential;
+
+export async function ambilCredential(id: number) {
+  return prisma.vaultCredential.findUnique({
     where: { id },
     select: {
-      ...kolomItem,
-      ulasan: {
-        select: { id: true, nama: true, nilai: true, komentar: true },
-        orderBy: { dibuatPada: "desc" },
+      ...kolomCredential,
+      auditLogs: {
+        select: {
+          id: true,
+          deviceId: true,
+          action: true,
+          securityRate: true,
+          details: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "desc" },
       },
     },
   });
 }
+
+// Alias kompatibilitas
+export const ambilItem = ambilCredential;
