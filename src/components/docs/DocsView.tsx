@@ -323,7 +323,7 @@ export const DocsView: React.FC = () => {
                   {ramVault.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs space-y-2 shadow-lg"
+                      className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs space-y-2 shadow-lg hover:border-cyan-500/50 hover:bg-slate-900/60 transition cursor-pointer"
                     >
                       <div className="flex justify-between text-[10px] text-slate-500">
                         <span>{item.memoryAddress}</span>

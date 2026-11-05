@@ -16,7 +16,7 @@ export default function GuideHubPage() {
 
   return (
     <div
-      className={`min-h-screen font-sans flex flex-col antialiased transition-colors duration-300 ${
+      className={`h-screen font-sans flex flex-col antialiased transition-colors duration-300 overflow-hidden ${
         isLight
           ? 'bg-slate-50 text-slate-900 selection:bg-cyan-500 selection:text-white'
           : 'bg-slate-950 text-slate-100 selection:bg-cyan-400 selection:text-slate-950'
@@ -26,7 +26,7 @@ export default function GuideHubPage() {
       <HeaderNav />
 
       {/* Main Workspace Tabs */}
-      <main className="flex-1 flex overflow-hidden">
+      <main className="flex-1 min-h-0 flex overflow-hidden">
         {activeTab === 'home' && <HomeView />}
         {activeTab === 'intro' && <IntroView />}
         {activeTab === 'docs' && <DocsView />}

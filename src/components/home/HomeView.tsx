@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, BookOpen, Flame, Command, Cpu, Wifi } from 'lucide-react';
+import { Sparkles, BookOpen, Flame, Command, Cpu, Wifi, ArrowRight } from 'lucide-react';
 import { StealthVaultLogo } from '@/components/common/StealthVaultLogo';
 import { StickmanHomeHero } from '@/components/stickman/StickmanHomeHero';
 import { useSandboxStore } from '@/stores/useSandboxStore';
 
 export const HomeView: React.FC = () => {
-  const { setActiveTab, themeMode } = useSandboxStore();
+  const { setActiveTab, setPlatformGuide, setGuideStep, themeMode } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   return (
@@ -67,40 +67,71 @@ export const HomeView: React.FC = () => {
       {/* STICKMAN VISUAL ANIMATION SCENARIO */}
       <StickmanHomeHero />
 
-      {/* Quick Feature Visual Highlights */}
+      {/* Quick Feature Interactive Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-cyan-500/40 transition backdrop-blur-xl">
+        <button
+          onClick={() => {
+            setPlatformGuide('pc');
+            setGuideStep(2);
+            setActiveTab('docs');
+          }}
+          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-cyan-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+        >
           <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20 w-fit">
             <Command className="w-5 h-5" />
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-slate-100">Win + R Stealth Launch</h3>
+          <h3 className="text-sm sm:text-base font-bold text-slate-100 group-hover:text-cyan-400 transition">
+            Win + R Stealth Launch
+          </h3>
           <p className="text-xs text-slate-400 leading-relaxed">
             Luncurkan vault secara tersembunyi menggunakan registry alias{' '}
             <code className="text-cyan-300 font-mono">mypass</code> tanpa perlu ikon desktop yang mencolok.
           </p>
-        </div>
+          <div className="text-[11px] text-cyan-400 font-bold flex items-center gap-1 group-hover:translate-x-1 transition pt-1">
+            <span>Buka Panduan Windows Run</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </button>
 
-        <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-blue-500/40 transition backdrop-blur-xl">
+        <button
+          onClick={() => setActiveTab('intro')}
+          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+        >
           <div className="p-3 bg-blue-500/10 text-blue-400 rounded-2xl border border-blue-500/20 w-fit">
             <Cpu className="w-5 h-5" />
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-slate-100">Volatile RAM Execution</h3>
+          <h3 className="text-sm sm:text-base font-bold text-slate-100 group-hover:text-blue-400 transition">
+            Volatile RAM Execution
+          </h3>
           <p className="text-xs text-slate-400 leading-relaxed">
             Data terdekripsi hanya hidup di memori RAM dan langsung lenyap di-zeroize sempurna begitu aplikasi ditutup.
             Zero disk footprint.
           </p>
-        </div>
+          <div className="text-[11px] text-blue-400 font-bold flex items-center gap-1 group-hover:translate-x-1 transition pt-1">
+            <span>Pelajari Analisis Ancaman Memori</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </button>
 
-        <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-indigo-500/40 transition backdrop-blur-xl">
+        <button
+          onClick={() => setActiveTab('architecture')}
+          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-indigo-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+        >
           <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20 w-fit">
             <Wifi className="w-5 h-5" />
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-slate-100">Local P2P Mesh Sync</h3>
+          <h3 className="text-sm sm:text-base font-bold text-slate-100 group-hover:text-indigo-400 transition">
+            Local P2P Mesh Sync
+          </h3>
           <p className="text-xs text-slate-400 leading-relaxed">
             Sinkronisasi dua arah langsung antara aplikasi Android dan PC via local Wi-Fi port 14202 menggunakan
             algoritma CRDT tanpa server cloud.
           </p>
-        </div>
+          <div className="text-[11px] text-indigo-400 font-bold flex items-center gap-1 group-hover:translate-x-1 transition pt-1">
+            <span>Lihat Diagram Alur Arsitektur</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </button>
       </div>
     </div>
   );

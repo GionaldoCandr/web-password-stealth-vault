@@ -44,6 +44,7 @@ export const CurriculumView: React.FC = () => {
 
   const [selectedPhase, setSelectedPhase] = useState<number>(4); // Default to newly integrated Phase 4 / Final Project
   const [selectedCourseId, setSelectedCourseId] = useState<CourseId>('kks');
+  const [activeModuleWeek, setActiveModuleWeek] = useState<number | null>(null);
 
   // Interactive Live Tool State for Phase 1: XOR Demo
   const [xorInput, setXorInput] = useState('VaultPass');
@@ -470,24 +471,42 @@ export const CurriculumView: React.FC = () => {
 
         {/* 4 Modules Grid */}
         <div className="space-y-4">
-          {selectedCourse.modules.map((mod) => (
-            <div
-              key={mod.week}
-              className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4 hover:border-slate-700 transition"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 font-mono text-xs font-bold flex items-center justify-center">
-                    {mod.week}
-                  </span>
-                  <h4 className="text-sm font-bold text-slate-200">
-                    Pekan {mod.week}: {mod.title}
-                  </h4>
+          {selectedCourse.modules.map((mod) => {
+            const isModuleSelected = activeModuleWeek === mod.week;
+            return (
+              <div
+                key={mod.week}
+                onClick={() => setActiveModuleWeek(isModuleSelected ? null : mod.week)}
+                className={`p-5 rounded-2xl border space-y-4 transition cursor-pointer ${
+                  isModuleSelected
+                    ? 'bg-slate-900/90 border-cyan-400 ring-2 ring-cyan-500/30 shadow-2xl shadow-cyan-950/40'
+                    : 'bg-slate-950 border-slate-800 hover:border-slate-700 hover:bg-slate-900/40'
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <span
+                      className={`w-6 h-6 rounded-full font-mono text-xs font-bold flex items-center justify-center ${
+                        isModuleSelected ? 'bg-cyan-500 text-slate-950' : 'bg-cyan-500/20 text-cyan-400'
+                      }`}
+                    >
+                      {mod.week}
+                    </span>
+                    <h4 className="text-sm font-bold text-slate-200">
+                      Pekan {mod.week}: {mod.title}
+                    </h4>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {isModuleSelected && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        Dipilih
+                      </span>
+                    )}
+                    <span className="text-[10px] text-slate-400 font-mono bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                      {mod.subCpmk.split(':')[0]}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[10px] text-slate-400 font-mono bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                  {mod.subCpmk.split(':')[0]}
-                </span>
-              </div>
 
               {/* Sub-CPMK Description */}
               <p className="text-xs text-cyan-300/90 font-medium">{mod.subCpmk}</p>
@@ -558,8 +577,9 @@ export const CurriculumView: React.FC = () => {
                   <span>Bukti Interaktif: {mod.interactiveProof}</span>
                 </div>
               </div>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
 
