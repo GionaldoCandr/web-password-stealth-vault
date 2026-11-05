@@ -242,13 +242,13 @@ Jika entri sudah ada di basis data, Prisma mengeksekusi blok `update: {}` tanpa 
 
 | Entitas | Operasi | Aksi / Halaman | Metode Prisma Client | Penanganan Galat & Respons Pengguna |
 | :--- | :--- | :--- | :--- | :--- |
-| **VaultCredential** | Create | `app/katalog/actions.ts` (`tambahCredential`) | `prisma.vaultCredential.create` | Menangkap `P2002` $\rightarrow$ mengembalikan pesan galat field `{ service: ["Layanan (service) sudah terdaftar dalam brankas"] }`. |
-| **VaultCredential** | Read (List) | `app/katalog/page.tsx` (`ambilDaftarCredential`) | `prisma.vaultCredential.findMany` | Memilih kolom spesifik via `select` dan mengurutkan berdasarkan `createdAt: "desc"`. |
-| **VaultCredential** | Read (Detail) | `app/katalog/[id]/page.tsx` (`ambilCredential`) | `prisma.vaultCredential.findUnique` | Memuat kredensial beserta relasi `auditLogs` dalam 1 query terpadu (mencegah masalah N+1). Jika data null $\rightarrow$ memicu `notFound()`. |
-| **VaultCredential** | Update | `app/katalog/actions.ts` (`ubahCredential`) | `prisma.vaultCredential.update` | Menangkap `P2002` (duplikasi layanan) dan `P2025` ("Kredensial tidak ditemukan atau sudah dihapus"). |
-| **VaultCredential** | Delete | `app/katalog/actions.ts` (`hapusCredential`) | `prisma.$transaction([auditLog.deleteMany, vaultCredential.delete])` | Menghapus log audit terkait terlebih dahulu, kemudian menghapus kredensial secara atomik, dilanjutkan `redirect("/katalog")`. |
-| **AuditLog** | Create | `app/katalog/ulasan-actions.ts` (`tambahAuditLog`) | `prisma.auditLog.create` | Menangkap `P2002` $\rightarrow$ `{ deviceId: ["Perangkat ini sudah memiliki catatan audit pada kredensial ini"] }`, dan `P2003` $\rightarrow$ `{ pesan: "Kredensial tidak ditemukan." }`. |
-| **AuditLog** | Delete | `app/katalog/ulasan-actions.ts` (`hapusAuditLog`) | `prisma.auditLog.deleteMany` | `where: { id, credentialId }` memastikan log audit hanya terhapus dari konteks kredensial yang tepat. |
+| **VaultCredential** | Create | `app/vault/actions.ts` (`tambahCredential`) | `prisma.vaultCredential.create` | Menangkap `P2002` $\rightarrow$ mengembalikan pesan galat field `{ service: ["Layanan (service) sudah terdaftar dalam brankas"] }`. |
+| **VaultCredential** | Read (List) | `app/vault/page.tsx` (`ambilDaftarCredential`) | `prisma.vaultCredential.findMany` | Memilih kolom spesifik via `select` dan mengurutkan berdasarkan `createdAt: "desc"`. |
+| **VaultCredential** | Read (Detail) | `app/vault/[id]/page.tsx` (`ambilCredential`) | `prisma.vaultCredential.findUnique` | Memuat kredensial beserta relasi `auditLogs` dalam 1 query terpadu (mencegah masalah N+1). Jika data null $\rightarrow$ memicu `notFound()`. |
+| **VaultCredential** | Update | `app/vault/actions.ts` (`ubahCredential`) | `prisma.vaultCredential.update` | Menangkap `P2002` (duplikasi layanan) dan `P2025` ("Kredensial tidak ditemukan atau sudah dihapus"). |
+| **VaultCredential** | Delete | `app/vault/actions.ts` (`hapusCredential`) | `prisma.$transaction([auditLog.deleteMany, vaultCredential.delete])` | Menghapus log audit terkait terlebih dahulu, kemudian menghapus kredensial secara atomik, dilanjutkan `redirect("/vault")`. |
+| **AuditLog** | Create | `app/vault/audit-actions.ts` (`tambahAuditLog`) | `prisma.auditLog.create` | Menangkap `P2002` $\rightarrow$ `{ deviceId: ["Perangkat ini sudah memiliki catatan audit pada kredensial ini"] }`, dan `P2003` $\rightarrow$ `{ pesan: "Kredensial tidak ditemukan." }`. |
+| **AuditLog** | Delete | `app/vault/audit-actions.ts` (`hapusAuditLog`) | `prisma.auditLog.deleteMany` | `where: { id, credentialId }` memastikan log audit hanya terhapus dari konteks kredensial yang tepat. |
 
 ---
 
@@ -318,13 +318,13 @@ Pengujian dilakukan mencakup 10 skenario komprehensif pada fungsionalitas **Stea
 
 | No | Skenario Pengujian | Hasil yang Diharapkan | Hasil Aktual | Status |
 | :---: | :--- | :--- | :--- | :---: |
-| 1 | **Tambah kredensial sah (`gitlab.com`)** | Data tersimpan di PostgreSQL, muncul pada katalog brankas | Kredensial tersimpan dan langsung tampil di urutan teratas | **LULUS** |
+| 1 | **Tambah kredensial sah (`gitlab.com`)** | Data tersimpan di PostgreSQL, muncul pada dashboard brankas | Kredensial tersimpan dan langsung tampil di urutan teratas | **LULUS** |
 | 2 | **Tambah kredensial service ganda** | Ditolak oleh Prisma (P2002), form menampilkan galat pada kolom service | Form menampilkan galat *"Layanan (service) sudah terdaftar dalam brankas"* | **LULUS** |
 | 3 | **Tambah kredensial masukan kosong** | Validasi Zod menolak di Server Action, tidak ada query DB yang dikirim | Form menampilkan galat validasi *"Nama layanan minimal 3 karakter"* | **LULUS** |
 | 4 | **Ubah recovery notes kredensial** | Perubahan catatan tersimpan di PostgreSQL dan tampil pada rute detail | Catatan pemulihan baru berhasil diperbarui dan tampil di detail | **LULUS** |
 | 5 | **Ubah kredensial yang sudah terhapus** | Ditangkap galat P2025, form menampilkan pesan informasi yang ramah | Form menampilkan pesan *"Kredensial tidak ditemukan atau sudah dihapus dari brankas"* | **LULUS** |
-| 6 | **Akses ID rute invalid `/katalog/abc`** | Parameter non-integer dideteksi, melempar fungsi `notFound()` | Menampilkan antarmuka 404 Next.js, bukan galat internal server | **LULUS** |
-| 7 | **Hapus kredensial beserta audit log** | Transaksi berhasil menghapus seluruh log audit dan kredensial secara bersih | Kredensial dan audit log terhapus tuntas, redirect ke `/katalog` | **LULUS** |
+| 6 | **Akses ID rute invalid `/vault/abc`** | Parameter non-integer dideteksi, melempar fungsi `notFound()` | Menampilkan antarmuka 404 Next.js, bukan galat internal server | **LULUS** |
+| 7 | **Hapus kredensial beserta audit log** | Transaksi berhasil menghapus seluruh log audit dan kredensial secara bersih | Kredensial dan audit log terhapus tuntas, redirect ke `/vault` | **LULUS** |
 | 8 | **Hapus kredensial, kueri kedua gagal** | Transaksi membatalkan perintah pertama (*rollback*), data audit log tidak hilang | Rollback berhasil 100%, jumlah audit log di basis data tetap utuh | **LULUS** |
 | 9 | **Tambah audit log rating di luar batas (skor 10)** | Validasi Zod menolak nilai $> 5$, tidak ada kueri create ke basis data | Galat Zod muncul *"Nilai maksimal 5"* | **LULUS** |
 | 10 | **Tambah audit log ganda dari perangkat yang sama** | Ditolak oleh composite unique constraint `@@unique([credentialId, deviceId])` (P2002) | Form menampilkan galat *"Perangkat ini sudah memiliki catatan audit..."* | **LULUS** |
@@ -343,7 +343,7 @@ $$\text{Persentase} = \frac{10}{10} \times 100\% = 100\% \quad (\text{Memenuhi t
    - *Masalah:* Skrip seed gagal dijalankan bila mengimpor instans Prisma dari `src/lib/prisma.ts` yang memuat `import "server-only"`.
    - *Solusi:* Mengonfigurasi instans Prisma independen di dalam `prisma/seed.ts` dan membaca data awal langsung dari `prisma/data-awal.ts`.
 3. **Kendala Penanganan Redirect pada Server Action:**
-   - *Masalah:* Pemanggilan `redirect("/katalog")` di dalam blok `try` menyebabkan exception `NEXT_REDIRECT` tertangkap oleh blok `catch`.
+   - *Masalah:* Pemanggilan `redirect("/vault")` di dalam blok `try` menyebabkan exception `NEXT_REDIRECT` tertangkap oleh blok `catch`.
    - *Solusi:* Memindahkan baris `redirect()` ke luar blok `try-catch` agar proses pengalihan rute dieksekusi dengan benar oleh Next.js.
 4. **Kendala Penanganan Kolom Opsional Bertipe Null:**
    - *Masalah:* Kolom opsional `notes` dari PostgreSQL bernilai `null`, yang memicu ketidakcocokan tipe bila TypeScript mengharapkan `string | undefined`.

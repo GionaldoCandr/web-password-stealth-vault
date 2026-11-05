@@ -13,7 +13,8 @@ Salin teks di bawah ini ke dalam kolom teks daring penyerahan tugas pada e-learn
 - **Produk:** Stealth Password Vault — Zero-Disk Credential Management & Lab Hub  
 - **Cabang Git:** `main`  
 - **Tautan Repositori Dokumen Teknis di GitHub:**  
-  https://github.com/GionaldoCandr/web-password-stealth-vault/blob/main/docs/praktikum/Week6/modul-06.md  
+  https://github.com/GionaldoCandr/web-password-stealth-vault/blob/main/docs/praktikum/modul-06.md  
+  *(Atau alternatif berkas di direktori pekan: https://github.com/GionaldoCandr/web-password-stealth-vault/blob/main/docs/praktikum/Week6/Modul-06.md)*  
 
 ---
 
