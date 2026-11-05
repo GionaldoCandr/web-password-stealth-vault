@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   GraduationCap,
   Shield,
@@ -60,29 +60,15 @@ export const CurriculumView: React.FC = () => {
   // Interactive Live Tool State for Phase 2: Extended Euclidean Algorithm (EEA)
   const [eeaA, setEeaA] = useState<number>(11);
   const [eeaN, setEeaN] = useState<number>(26);
-  const [eeaResult, setEeaResult] = useState<{
-    gcd: number;
-    inv: number | null;
-    steps: string[];
-  }>({ gcd: 1, inv: 19, steps: [] });
 
   // Interactive Live Tool State for Phase 2: RFC 9457 & Zod Validator
   const [testPasswordInput, setTestPasswordInput] = useState('weak');
-  const [zodResponse, setZodResponse] = useState<any>(null);
 
   // Interactive Live Tool State for Phase 3: RSA Demo (Kriptografi Minggu 9)
   const [rsaP, setRsaP] = useState<number>(13);
   const [rsaQ, setRsaQ] = useState<number>(19);
   const [rsaE, setRsaE] = useState<number>(5);
   const [rsaMsg, setRsaMsg] = useState<number>(42);
-  const [rsaResult, setRsaResult] = useState<{
-    n: number;
-    phi: number;
-    d: number;
-    cipher: number;
-    decrypted: number;
-    signature: number;
-  }>({ n: 247, phi: 216, d: 173, cipher: 126, decrypted: 42, signature: 133 });
 
   // Interactive Live Tool State for Phase 3: Vitest Test Runner (PAW Modul 12)
   const [testRunning, setTestRunning] = useState(false);
@@ -141,7 +127,8 @@ export const CurriculumView: React.FC = () => {
 
   // Extended GCD for inverse modulo
   const modInverse = (a: number, m: number) => {
-    let m0 = m, t, q;
+    const m0 = m;
+    let t, q;
     let x0 = 0, x1 = 1;
     if (m === 1) return 0;
     while (a > 1) {
@@ -157,8 +144,8 @@ export const CurriculumView: React.FC = () => {
     return x1;
   };
 
-  // Recalculate RSA
-  useEffect(() => {
+  // Recalculate RSA with useMemo
+  const rsaResult = useMemo(() => {
     try {
       const n = rsaP * rsaQ;
       const phi = (rsaP - 1) * (rsaQ - 1);
@@ -166,9 +153,9 @@ export const CurriculumView: React.FC = () => {
       const cipher = modPow(rsaMsg, rsaE, n);
       const decrypted = modPow(cipher, d, n);
       const signature = modPow(rsaMsg, d, n);
-      setRsaResult({ n, phi, d, cipher, decrypted, signature });
+      return { n, phi, d, cipher, decrypted, signature };
     } catch {
-      // Fallback
+      return { n: 0, phi: 0, d: 0, cipher: 0, decrypted: 0, signature: 0 };
     }
   }, [rsaP, rsaQ, rsaE, rsaMsg]);
 
@@ -255,52 +242,48 @@ export const CurriculumView: React.FC = () => {
     calculateAvalanche();
   }, [avalancheText1, avalancheText2]);
 
-  // Helper for Extended Euclidean Algorithm
-  useEffect(() => {
-    function computeEEA(a: number, n: number) {
-      if (a <= 0 || n <= 0) {
-        setEeaResult({ gcd: 0, inv: null, steps: ['Masukkan nilai bilangan bulat positif > 0'] });
-        return;
-      }
-
-      let r0 = n, r1 = a;
-      let t0 = 0, t1 = 1;
-      const steps: string[] = [];
-
-      steps.push(`Mencari FPB(${a}, ${n}) dan invers modulo ${a}^(-1) mod ${n}:`);
-
-      while (r1 !== 0) {
-        const q = Math.floor(r0 / r1);
-        const r2 = r0 - q * r1;
-        const t2 = t0 - q * t1;
-
-        steps.push(`${r0} = ${q} × ${r1} + ${r2}  (t = ${t0} - ${q}×(${t1}) = ${t2})`);
-
-        r0 = r1;
-        r1 = r2;
-        t0 = t1;
-        t1 = t2;
-      }
-
-      const gcd = r0;
-      let inv: number | null = null;
-      if (gcd === 1) {
-        inv = ((t0 % n) + n) % n;
-        steps.push(`Karena FPB = 1, invers modular ditemukan: ${a}^(-1) ≡ ${inv} (mod ${n})`);
-        steps.push(`Verifikasi: (${a} × ${inv}) mod ${n} = ${(a * inv) % n}`);
-      } else {
-        steps.push(`Karena FPB = ${gcd} ≠ 1, invers modular ${a}^(-1) mod ${n} TIDAK ADA.`);
-      }
-
-      setEeaResult({ gcd, inv, steps });
+  // Helper for Extended Euclidean Algorithm (useMemo)
+  const eeaResult = useMemo(() => {
+    if (eeaA <= 0 || eeaN <= 0) {
+      return { gcd: 0, inv: null, steps: ['Masukkan nilai bilangan bulat positif > 0'] };
     }
-    computeEEA(eeaA, eeaN);
+
+    let r0 = eeaN, r1 = eeaA;
+    let t0 = 0, t1 = 1;
+    const steps: string[] = [];
+
+    steps.push(`Mencari FPB(${eeaA}, ${eeaN}) dan invers modulo ${eeaA}^(-1) mod ${eeaN}:`);
+
+    while (r1 !== 0) {
+      const q = Math.floor(r0 / r1);
+      const r2 = r0 - q * r1;
+      const t2 = t0 - q * t1;
+
+      steps.push(`${r0} = ${q} × ${r1} + ${r2}  (t = ${t0} - ${q}×(${t1}) = ${t2})`);
+
+      r0 = r1;
+      r1 = r2;
+      t0 = t1;
+      t1 = t2;
+    }
+
+    const gcd = r0;
+    let inv: number | null = null;
+    if (gcd === 1) {
+      inv = ((t0 % eeaN) + eeaN) % eeaN;
+      steps.push(`Karena FPB = 1, invers modular ditemukan: ${eeaA}^(-1) ≡ ${inv} (mod ${eeaN})`);
+      steps.push(`Verifikasi: (${eeaA} × ${inv}) mod ${eeaN} = ${(eeaA * inv) % eeaN}`);
+    } else {
+      steps.push(`Karena FPB = ${gcd} ≠ 1, invers modular ${eeaA}^(-1) mod ${eeaN} TIDAK ADA.`);
+    }
+
+    return { gcd, inv, steps };
   }, [eeaA, eeaN]);
 
-  // Helper for Zod & RFC 9457 Validation Test
-  useEffect(() => {
+  // Helper for Zod & RFC 9457 Validation Test (useMemo)
+  const zodResponse = useMemo(() => {
     if (testPasswordInput.length < 8) {
-      setZodResponse({
+      return {
         status: 422,
         contentType: 'application/problem+json',
         body: {
@@ -316,18 +299,17 @@ export const CurriculumView: React.FC = () => {
             },
           ],
         },
-      });
-    } else {
-      setZodResponse({
-        status: 200,
-        contentType: 'application/json',
-        body: {
-          success: true,
-          message: 'Validasi skema Zod 4 berhasil: Master password memenuhi kriteria minimum.',
-          entropyLevel: 'High',
-        },
-      });
+      };
     }
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: {
+        success: true,
+        message: 'Validasi skema Zod 4 berhasil: Master password memenuhi kriteria minimum.',
+        entropyLevel: 'High',
+      },
+    };
   }, [testPasswordInput]);
 
   const courseIcons: Record<string, React.ReactNode> = {
