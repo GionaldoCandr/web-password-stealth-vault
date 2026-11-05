@@ -1,4 +1,4 @@
-import type { VaultCategory } from "../src/lib/tipe";
+export type VaultCategory = "campus" | "finance" | "work" | "social";
 
 export type DataAwalCredential = {
   service: string;
