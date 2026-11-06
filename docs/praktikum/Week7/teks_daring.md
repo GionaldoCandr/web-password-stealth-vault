@@ -67,9 +67,9 @@
 #### 5. Pasangan Telaah Kode
 - **Nama Mahasiswa:** Gionaldo Chandrawansah (NIM: 105224031)
 - **Repositori Pemilik:** https://github.com/GionaldoCandr/web-password-stealth-vault
-- **Nama Pasangan Telaah:** *(Ditetapkan oleh Dosen/Asisten Praktikum saat sesi)*
-- **NIM Pasangan Telaah:** [NIM Pasangan]
-- **URL Repositori Pasangan:** https://github.com/[username-pasangan]/[nama-repo-pasangan]
+- **Nama Pasangan Telaah:** Danu Dimas Putra
+- **NIM Pasangan Telaah:** 105224003
+- **URL Repositori Pasangan:** https://github.com/danu44-1/Praktikum_Pem_WEB
 - **Bukti Undangan Collaborator:** Undangan kolaborator telah dikirimkan via menu GitHub Settings -> Collaborators dan telah diterima dengan hak akses *Write/Admin*.
 
 ---
@@ -78,3 +78,4 @@
 - **Alat Bantu:** Antigravity AI (Google Deepmind Engine).
 - **Bagian yang Dibantu:** Perumusan laporan langkah reproduksi galat terstruktur sesuai arsitektur Next.js & PostgreSQL, komparasi fitur debugging VS Code, serta analisis spesifikasi ECMAScript type coercion dan arsitektur eksepsi `NEXT_REDIRECT`.
 - **Cara Verifikasi:** Pengujian langsung evaluasi `Boolean("false")` di terminal Node.js / Chrome DevTools, verifikasi dokumentasi Next.js untuk `redirect()`, dan verifikasi dokumentasi resmi Prisma ORM Error Reference.
+

@@ -120,16 +120,14 @@ Pada arsitektur Next.js (App Router), fungsi `redirect()` bekerja dengan mekanis
 - **Nama Mahasiswa Pemilik Repositori:** Gionaldo Chandrawansah  
 - **NIM:** 105224031  
 - **URL Repositori Produk:** [https://github.com/GionaldoCandr/web-password-stealth-vault](https://github.com/GionaldoCandr/web-password-stealth-vault)  
-- **Nama Pasangan Telaah:** *(Ditetapkan oleh Dosen/Asisten Praktikum pada Sesi Kelas)*  
-- **NIM Pasangan Telaah:** `[NIM Pasangan]`  
-- **URL Repositori Pasangan:** `https://github.com/[username-pasangan]/[nama-repo-pasangan]`  
+- **Nama Pasangan Telaah:** Danu Dimas Putra
+- **NIM Pasangan Telaah:** `105224003`  
+- **URL Repositori Pasangan:** https://github.com/danu44-1/Praktikum_Pem_WEB
 - **Bukti Undangan Collaborator:**  
   Undangan kolaborator telah dikirimkan melalui menu **Settings $\rightarrow$ Collaborators** pada repositori GitHub dan status undangan telah diterima (*Access Accepted - Write/Admin access*).
 
 > **Tangkapan Layar Bukti Collaborator GitHub:**
-> 
-> <!-- TANGKAP LAYAR STATUS COLLABORATOR DISINI -->
-> ![Bukti Undangan Collaborator](image-collaborator.png)
+![collab](image.png)
 
 ---
 
@@ -141,3 +139,4 @@ Pada arsitektur Next.js (App Router), fungsi `redirect()` bekerja dengan mekanis
 | **Tujuan & Perintah Utama** | 1. Memformulasikan langkah reproduksi galat terstruktur sesuai standar ilmiah perutean dan penanganan relasi basis data pada produk Stealth Password Vault.<br>2. Menganalisis perbedaan teknis operasional fitur debugging VS Code (Breakpoint, Conditional Breakpoint, Logpoint).<br>3. Menganalisis spesifikasi ECMAScript type coercion `Boolean("false")` dan mekanisme internal exception `NEXT_REDIRECT` Next.js.<br>4. Memetakan kode galat Prisma (P2002, P2003, P2025) ke entitas produk `VaultCredential` dan `AuditLog`. |
 | **Bagian yang Dibantu** | Penyusunan format laporan reproduksi galat, penjelasan konseptual perbedaan alat debugging VS Code, serta penjelasan rinci perilaku eksepsi Next.js. |
 | **Metode Verifikasi Mandiri** | 1. Menguji ekspresi `Boolean("false")` langsung di konsol Node.js dan Chrome DevTools untuk membuktikan nilai kembaliannya adalah `true`.<br>2. Memeriksa dokumentasi resmi Next.js mengenai penanganan `redirect()` dan eksepsi `NEXT_REDIRECT`.<br>3. Memeriksa dokumentasi referensi kode galat Prisma ORM (*Error code reference* P2002, P2003, P2025). |
+
