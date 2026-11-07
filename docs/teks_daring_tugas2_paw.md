@@ -7,7 +7,7 @@
 **Repositori GitHub:** https://github.com/GionaldoCandr/web-password-stealth-vault (Monorepo root: https://github.com/giobap/Root-Pass-Project)  
 **Folder Produk:** `web-password-stealth-vault/`  
 **Penanda Rilis (Git Tag):** `v0.2`  
-**Hash Commit:** `0306cc6a0e620725c5dd04eab76864cd0461fa45` (atau commit terbaru pasca-tag)  
+**Hash Commit:** `e65a244e30949065d8911ddcea73181a08088875`  
 
 ---
 
