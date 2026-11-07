@@ -51,7 +51,7 @@ export const skemaCredential = z.object({
 
 export type MasukanCredential = z.infer<typeof skemaCredential>;
 
-// Skema Validasi Produk: Stealth Password Vault (Modul 6 PostgreSQL & Prisma)
+// Skema Validasi Produk: Stealth Password Vault (Milestone 2 PostgreSQL & Prisma 7)
 export const skemaVaultCredential = z.object({
   service: z
     .string()
@@ -59,10 +59,19 @@ export const skemaVaultCredential = z.object({
     .min(3, "Nama layanan minimal 3 karakter")
     .max(100, "Nama layanan maksimal 100 karakter"),
   category: z.enum(["campus", "finance", "work", "social"]),
-  username: z.string().trim().min(3, "Username minimal 3 karakter"),
-  encryptedSecret: z.string().min(8, "Ciphertext minimal 8 karakter"),
-  isActive: z.boolean().default(true),
-  notes: z.string().optional(),
+  username: z
+    .string()
+    .trim()
+    .min(3, "Username minimal 3 karakter"),
+  encryptedSecret: z
+    .string()
+    .trim()
+    .min(8, "Ciphertext minimal 8 karakter"),
+  isActive: z
+    .union([z.boolean(), z.string()])
+    .transform((val) => val === true || val === "true" || val === "on")
+    .default(true),
+  notes: z.string().trim().optional(),
 });
 
 export type MasukanVaultCredential = z.infer<typeof skemaVaultCredential>;
@@ -73,8 +82,15 @@ export const skemaAuditLog = z.object({
     .trim()
     .min(3, "ID perangkat minimal 3 karakter")
     .max(50, "ID perangkat maksimal 50 karakter"),
-  action: z.string().trim().min(2, "Aksi audit minimal 2 karakter"),
-  securityRate: z.coerce.number().int().min(1, "Nilai minimal 1").max(5, "Nilai maksimal 5"),
+  action: z
+    .string()
+    .trim()
+    .min(2, "Aksi audit minimal 2 karakter"),
+  securityRate: z.coerce
+    .number()
+    .int("Skor harus bilangan bulat")
+    .min(1, "Skor minimal 1 (lemah)")
+    .max(5, "Skor maksimal 5 (sangat kuat)"),
   details: z
     .string()
     .trim()

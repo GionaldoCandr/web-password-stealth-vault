@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap } from 'lucide-react';
+import Link from 'next/link';
+import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database } from 'lucide-react';
 import { StealthVaultLogo } from './StealthVaultLogo';
 import { useSandboxStore, TabType, ThemeMode } from '@/stores/useSandboxStore';
 
@@ -77,6 +78,17 @@ export const HeaderNav: React.FC = () => {
             );
           })}
         </nav>
+
+        {/* Milestone 2: Persistent PostgreSQL Vault */}
+        <Link
+          href="/vault"
+          className="flex items-center gap-1.5 px-3 py-1.5 h-8.5 rounded-lg text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition shadow-sm shrink-0"
+          title="Buka Brankas Persisten PostgreSQL (Milestone 2 - v0.2)"
+        >
+          <Database className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Brankas DB</span>
+          <span className="text-[10px] font-mono px-1 py-0.2 bg-cyan-400/20 rounded">v0.2</span>
+        </Link>
 
         {/* Live RAM Badge Indicator */}
         <div

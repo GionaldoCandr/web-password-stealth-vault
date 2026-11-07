@@ -44,3 +44,4 @@ Salin teks di bawah ini ke kolom teks daring pengumpulan Dokumen Teknis Modul 7 
 
 4. **Pencatatan Pemanfaatan AI (15%):**
    - Transparansi menyeluruh: Alat bantu (Antigravity AI / Google Deepmind), 4 prompt perintah utama, bagian kode usulan AI yang dievaluasi, 4 galat yang ditemukan pada kode AI, perubahan perbaikan yang dilakukan, serta 3 metode verifikasi mandiri (`tsc --noEmit`, pengujian debugger VS Code, dan pengujian fungsional).
+
