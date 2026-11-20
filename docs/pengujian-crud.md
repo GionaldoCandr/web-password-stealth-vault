@@ -119,3 +119,4 @@ Dengan mekanisme ini:
 2. Record induk kredensial kemudian dihapus.
 3. Apabila salah satu langkah mengalami kegagalan, basis data secara otomatis melakukan *rollback* penuh sehingga konsistensi data tetap terjamin (*ACID compliant*).
 4. `redirect("/vault")` dieksekusi secara aman di luar blok `try-catch` guna mencegah tertelannya eksepsi internal `NEXT_REDIRECT`.
+

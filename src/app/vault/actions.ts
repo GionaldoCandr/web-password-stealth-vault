@@ -233,3 +233,4 @@ export async function hapusAuditLog(id: number, credentialId: number) {
 
   revalidatePath(`/vault/${credentialId}`);
 }
+
