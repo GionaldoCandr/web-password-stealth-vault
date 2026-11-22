@@ -15,7 +15,234 @@
     color: #f1f5f9;
     font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+}
+
+/* =========================================================================
+   Light Mode Theme Overrides (Eye-Friendly Soft Slate, Non-Blinding Ergonomic)
+   ========================================================================= */
+html.light,
+.theme-light {
+  color-scheme: light;
+}
+
+html.light body,
+.theme-light body,
+.theme-light {
+  background-color: #f1f5f9 !important;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 110%, rgba(99, 102, 241, 0.06), transparent 70%) !important;
+  color: #1e293b !important;
+}
+
+html.light .bg-\[\#0c1427\],
+html.light .bg-\[\#0c1427\]\/90,
+.theme-light .bg-\[\#0c1427\],
+.theme-light .bg-\[\#0c1427\]\/90 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+}
+
+/* Light Mode Soft Card Surfaces */
+html.light .bg-slate-900:not(.keep-dark),
+.theme-light .bg-slate-900:not(.keep-dark) {
+  background-color: #ffffff;
+}
+
+html.light .bg-slate-900\/80:not(.keep-dark),
+html.light .bg-slate-900\/70:not(.keep-dark),
+html.light .bg-slate-900\/50:not(.keep-dark),
+.theme-light .bg-slate-900\/80:not(.keep-dark),
+.theme-light .bg-slate-900\/70:not(.keep-dark),
+.theme-light .bg-slate-900\/50:not(.keep-dark) {
+  background-color: rgba(255, 255, 255, 0.94);
+}
+
+html.light .bg-slate-950:not(.keep-dark),
+.theme-light .bg-slate-950:not(.keep-dark) {
+  background-color: #f8fafc;
+}
+
+html.light .bg-slate-950\/80:not(.keep-dark),
+html.light .bg-slate-950\/50:not(.keep-dark),
+html.light .bg-slate-950\/40:not(.keep-dark),
+html.light .bg-slate-950\/20:not(.keep-dark),
+.theme-light .bg-slate-950\/80:not(.keep-dark),
+.theme-light .bg-slate-950\/50:not(.keep-dark),
+.theme-light .bg-slate-950\/40:not(.keep-dark),
+.theme-light .bg-slate-950\/20:not(.keep-dark) {
+  background-color: rgba(248, 250, 252, 0.92);
+}
+
+html.light .bg-slate-800:not(.keep-dark),
+.theme-light .bg-slate-800:not(.keep-dark) {
+  background-color: #f1f5f9;
+}
+
+html.light .bg-slate-800\/80:not(.keep-dark),
+html.light .bg-slate-800\/60:not(.keep-dark),
+html.light .bg-slate-800\/50:not(.keep-dark),
+.theme-light .bg-slate-800\/80:not(.keep-dark),
+.theme-light .bg-slate-800\/60:not(.keep-dark),
+.theme-light .bg-slate-800\/50:not(.keep-dark) {
+  background-color: rgba(241, 245, 249, 0.92);
+}
+
+/* Borders in Light Mode */
+html.light .border-slate-800:not(.keep-dark),
+html.light .border-slate-700:not(.keep-dark),
+html.light .border-slate-700\/60:not(.keep-dark),
+.theme-light .border-slate-800:not(.keep-dark),
+.theme-light .border-slate-700:not(.keep-dark),
+.theme-light .border-slate-700\/60:not(.keep-dark) {
+  border-color: #e2e8f0;
+}
+
+html.light .border-slate-900:not(.keep-dark),
+.theme-light .border-slate-900:not(.keep-dark) {
+  border-color: #cbd5e1;
+}
+
+/* Form Controls in Light Mode */
+html.light input:not(.keep-dark),
+html.light select:not(.keep-dark),
+html.light textarea:not(.keep-dark),
+.theme-light input:not(.keep-dark),
+.theme-light select:not(.keep-dark),
+.theme-light textarea:not(.keep-dark) {
+  color: #1e293b !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder,
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* High Contrast & Soft Text in Light Mode */
+html.light .text-white:not(.keep-dark),
+.theme-light .text-white:not(.keep-dark) {
+  color: #0f172a;
+}
+html.light .text-slate-100:not(.keep-dark),
+.theme-light .text-slate-100:not(.keep-dark) {
+  color: #0f172a;
+}
+html.light .text-slate-200:not(.keep-dark),
+.theme-light .text-slate-200:not(.keep-dark) {
+  color: #1e293b;
+}
+html.light .text-slate-300:not(.keep-dark),
+.theme-light .text-slate-300:not(.keep-dark) {
+  color: #334155;
+}
+html.light .text-slate-400:not(.keep-dark),
+.theme-light .text-slate-400:not(.keep-dark) {
+  color: #64748b;
+}
+
+/* Eye-Friendly Cyber Accents in Light Mode */
+html.light .text-cyan-400:not(.keep-dark),
+html.light .text-cyan-300:not(.keep-dark),
+.theme-light .text-cyan-400:not(.keep-dark),
+.theme-light .text-cyan-300:not(.keep-dark) {
+  color: #0284c7;
+}
+
+html.light .text-blue-400:not(.keep-dark),
+.theme-light .text-blue-400:not(.keep-dark) {
+  color: #2563eb;
+}
+
+html.light .text-emerald-400:not(.keep-dark),
+.theme-light .text-emerald-400:not(.keep-dark) {
+  color: #059669;
+}
+
+html.light .text-indigo-400:not(.keep-dark),
+.theme-light .text-indigo-400:not(.keep-dark) {
+  color: #4f46e5;
+}
+
+html.light .text-purple-400:not(.keep-dark),
+.theme-light .text-purple-400:not(.keep-dark) {
+  color: #7c3aed;
+}
+
+html.light .text-amber-400:not(.keep-dark),
+.theme-light .text-amber-400:not(.keep-dark) {
+  color: #d97706;
+}
+
+html.light .text-rose-400:not(.keep-dark),
+html.light .text-rose-300:not(.keep-dark),
+.theme-light .text-rose-400:not(.keep-dark),
+.theme-light .text-rose-300:not(.keep-dark) {
+  color: #dc2626;
+}
+
+/* Light Mode Badges & Tints */
+html.light .bg-cyan-500\/10:not(.keep-dark),
+html.light .bg-cyan-500\/15:not(.keep-dark),
+html.light .bg-cyan-500\/20:not(.keep-dark),
+html.light .bg-cyan-950\/20:not(.keep-dark),
+html.light .bg-cyan-950\/30:not(.keep-dark),
+html.light .bg-cyan-950\/40:not(.keep-dark),
+.theme-light .bg-cyan-500\/10:not(.keep-dark),
+.theme-light .bg-cyan-500\/15:not(.keep-dark),
+.theme-light .bg-cyan-500\/20:not(.keep-dark),
+.theme-light .bg-cyan-950\/20:not(.keep-dark),
+.theme-light .bg-cyan-950\/30:not(.keep-dark),
+.theme-light .bg-cyan-950\/40:not(.keep-dark) {
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+html.light .bg-rose-950\/20:not(.keep-dark),
+html.light .bg-rose-500\/20:not(.keep-dark),
+.theme-light .bg-rose-950\/20:not(.keep-dark),
+.theme-light .bg-rose-500\/20:not(.keep-dark) {
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+}
+
+html.light .bg-emerald-950\/20:not(.keep-dark),
+html.light .bg-emerald-500\/20:not(.keep-dark),
+html.light .bg-emerald-500\/10:not(.keep-dark),
+.theme-light .bg-emerald-950\/20:not(.keep-dark),
+.theme-light .bg-emerald-500\/20:not(.keep-dark),
+.theme-light .bg-emerald-500\/10:not(.keep-dark) {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+html.light .bg-blue-500\/10:not(.keep-dark),
+html.light .bg-blue-500\/20:not(.keep-dark),
+html.light .bg-blue-900\/30:not(.keep-dark),
+.theme-light .bg-blue-500\/10:not(.keep-dark),
+.theme-light .bg-blue-500\/20:not(.keep-dark),
+.theme-light .bg-blue-900\/30:not(.keep-dark) {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+html.light .bg-amber-500\/10:not(.keep-dark),
+html.light .bg-amber-500\/20:not(.keep-dark),
+.theme-light .bg-amber-500\/10:not(.keep-dark),
+.theme-light .bg-amber-500\/20:not(.keep-dark) {
+  background-color: #fffbeb;
+  border-color: #fde68a;
+}
+
+html.light .bg-purple-500\/10:not(.keep-dark),
+html.light .bg-purple-500\/20:not(.keep-dark),
+.theme-light .bg-purple-500\/10:not(.keep-dark),
+.theme-light .bg-purple-500\/20:not(.keep-dark) {
+  background-color: #faf5ff;
+  border-color: #e9d5ff;
 }
 
 /* Custom Scrollbar */
@@ -28,13 +255,25 @@
   background: #0c1427;
 }
 
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 3px;
 }
 
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #38bdf8;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
 }
 
 /* Hide scrollbar utility */
@@ -191,10 +430,55 @@
   opacity: 1;
 }
 
+/* Light Mode Aurora Card (Soft Frosted Slate, Iridescent Border, Calming Glow) */
+html.light .card-aurora,
+.theme-light .card-aurora {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(248, 250, 252, 0.92) 50%,
+    rgba(241, 245, 249, 0.96) 100%
+  );
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  box-shadow: 
+    0 10px 25px -5px rgba(100, 116, 139, 0.12),
+    0 4px 6px -2px rgba(100, 116, 139, 0.05),
+    0 0 15px -3px rgba(14, 165, 233, 0.08);
+}
+
+html.light .card-aurora::before,
+.theme-light .card-aurora::before {
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.45),
+    rgba(147, 51, 234, 0.28),
+    rgba(16, 185, 129, 0.35),
+    rgba(59, 130, 246, 0.38)
+  );
+  opacity: 0.65;
+}
+
+html.light .card-aurora:hover,
+.theme-light .card-aurora:hover {
+  transform: translateY(-3px);
+  border-color: rgba(14, 165, 233, 0.5);
+  box-shadow: 
+    0 18px 36px -10px rgba(100, 116, 139, 0.2),
+    0 0 25px -4px rgba(14, 165, 233, 0.2);
+}
+
 /* Subtle Aurora Ambient Radial Backdrop */
 .aurora-bg-sheen {
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.07) 0%, transparent 40%),
     radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.06) 0%, transparent 50%);
+}
+
+html.light .aurora-bg-sheen,
+.theme-light .aurora-bg-sheen {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(147, 51, 234, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
 }

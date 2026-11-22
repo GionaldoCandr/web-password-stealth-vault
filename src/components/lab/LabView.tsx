@@ -46,8 +46,10 @@ export const LabView: React.FC = () => {
           isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'
         }`}
       >
-        <div className="p-4 border-b border-slate-800 bg-slate-900/50">
-          <label className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block mb-2">
+        <div className={`p-4 border-b ${isLight ? 'border-slate-200 bg-slate-50' : 'border-slate-800 bg-slate-900/50'}`}>
+          <label className={`text-[10px] font-bold uppercase tracking-wider block mb-2 ${
+            isLight ? 'text-cyan-800' : 'text-cyan-400'
+          }`}>
             Pilih Modul Lab Interaktif
           </label>
           <div className="space-y-2">
@@ -57,7 +59,11 @@ export const LabView: React.FC = () => {
                 onClick={() => setSelectedLab(lab)}
                 className={`w-full text-left p-3 rounded-xl border transition flex items-center justify-between cursor-pointer ${
                   selectedLab.id === lab.id
-                    ? 'bg-blue-900/30 border-cyan-400 text-slate-100'
+                    ? isLight
+                      ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-sm'
+                      : 'bg-blue-900/30 border-cyan-400 text-slate-100'
+                    : isLight
+                    ? 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100'
                     : 'bg-slate-950/50 border-slate-800 text-slate-400 hover:bg-slate-800/50'
                 }`}
               >
@@ -66,19 +72,25 @@ export const LabView: React.FC = () => {
                     <span
                       className={`text-[9px] px-2 py-0.5 rounded font-bold uppercase ${
                         lab.difficulty === 'Easy'
-                          ? 'bg-cyan-500/20 text-cyan-400'
+                          ? isLight ? 'bg-cyan-100 text-cyan-800' : 'bg-cyan-500/20 text-cyan-400'
                           : lab.difficulty === 'Medium'
-                          ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-amber-500/20 text-amber-400'
+                          ? isLight ? 'bg-blue-100 text-blue-800' : 'bg-blue-500/20 text-blue-400'
+                          : isLight ? 'bg-amber-100 text-amber-800' : 'bg-amber-500/20 text-amber-400'
                       }`}
                     >
                       {lab.difficulty}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">+{lab.xpPoints} XP</span>
+                    <span className={`text-[10px] font-mono ${isLight ? 'text-slate-500' : 'text-slate-500'}`}>
+                      +{lab.xpPoints} XP
+                    </span>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-200">{lab.title}</h4>
+                  <h4 className={`text-xs font-bold ${
+                    selectedLab.id === lab.id
+                      ? isLight ? 'text-blue-950 font-extrabold' : 'text-cyan-300'
+                      : isLight ? 'text-slate-800' : 'text-slate-200'
+                  }`}>{lab.title}</h4>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-600" />
+                <ChevronRight className="w-4 h-4 text-slate-400" />
               </button>
             ))}
           </div>
@@ -86,25 +98,41 @@ export const LabView: React.FC = () => {
 
         <div className="p-5 space-y-6 flex-1">
           <div>
-            <h2 className="text-base font-bold text-slate-100 mb-2">{selectedLab.title}</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">{selectedLab.description}</p>
+            <h2 className={`text-base font-bold mb-2 ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>
+              {selectedLab.title}
+            </h2>
+            <p className={`text-xs leading-relaxed ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              {selectedLab.description}
+            </p>
           </div>
 
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+          <div className={`p-4 rounded-xl border flex items-center justify-between ${
+            isLight ? 'bg-slate-50 border-slate-200 shadow-xs' : 'bg-slate-950 border-slate-800'
+          }`}>
             <div className="flex items-center gap-3">
-              <Award className="w-7 h-7 text-cyan-400" />
+              <Award className={`w-7 h-7 ${isLight ? 'text-cyan-700' : 'text-cyan-400'}`} />
               <div>
-                <h4 className="text-xs font-bold text-slate-200">Progress Lab</h4>
-                <p className="text-[11px] text-slate-400">Selesaikan seluruh task untuk menyelesaikan modul.</p>
+                <h4 className={`text-xs font-bold ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>Progress Lab</h4>
+                <p className={`text-[11px] ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  Selesaikan seluruh task untuk menyelesaikan modul.
+                </p>
               </div>
             </div>
-            <span className="text-xs font-bold font-mono px-3 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-lg">
+            <span className={`text-xs font-bold font-mono px-3 py-1 rounded-lg border ${
+              isLight
+                ? 'bg-cyan-100 text-cyan-800 border-cyan-300'
+                : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+            }`}>
               {completedCount} / {selectedLab.tasks.length} Done
             </span>
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-xs font-extrabold text-cyan-400 uppercase tracking-wider">Misi Lab:</h3>
+            <h3 className={`text-xs font-extrabold uppercase tracking-wider ${
+              isLight ? 'text-cyan-800' : 'text-cyan-400'
+            }`}>
+              Misi Lab:
+            </h3>
             {selectedLab.tasks.map((task, idx) => {
               const isDone = completedTasks[`${selectedLab.id}_${task.id}`];
               return (
@@ -112,7 +140,11 @@ export const LabView: React.FC = () => {
                   key={task.id}
                   className={`p-3.5 rounded-xl border transition space-y-1.5 ${
                     isDone
-                      ? 'bg-cyan-950/20 border-cyan-400/40 text-slate-200'
+                      ? isLight
+                        ? 'bg-cyan-50/80 border-cyan-300 text-slate-800'
+                        : 'bg-cyan-950/20 border-cyan-400/40 text-slate-200'
+                      : isLight
+                      ? 'bg-white border-slate-200 text-slate-700 shadow-xs'
                       : 'bg-slate-950 border-slate-800 text-slate-300'
                   }`}
                 >
@@ -161,7 +193,7 @@ export const LabView: React.FC = () => {
           <StickmanLabOperator />
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col keep-dark">
           <div className="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TerminalIcon className="w-4 h-4 text-cyan-400" />

@@ -64,14 +64,14 @@ const INITIAL_RAM_ITEMS: RAMVaultItem[] = [
   {
     id: '1',
     service: 'Github Main',
-    username: 'gio-stealth',
+    username: 'sec-operator',
     encryptedSecret: '0x8F9A...4B2C',
     memoryAddress: '0x7FFF0001',
   },
   {
     id: '2',
     service: 'ProtonMail',
-    username: 'gio@stealth.vault',
+    username: 'operator@sentinel-vault.io',
     encryptedSecret: '0x3D1E...9A8F',
     memoryAddress: '0x7FFF0040',
   },

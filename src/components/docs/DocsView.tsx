@@ -32,7 +32,9 @@ export const DocsView: React.FC = () => {
     isLocked,
     formError,
     ramVault,
+    themeMode,
   } = useSandboxStore();
+  const isLight = themeMode === 'light';
 
   const handleRunFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,11 +58,17 @@ export const DocsView: React.FC = () => {
           <h3 className="text-xs font-extrabold uppercase tracking-wider text-cyan-500 mb-3 flex items-center gap-2">
             <Monitor className="w-4 h-4" /> Pilih Platform Guide
           </h3>
-          <div className="grid grid-cols-3 gap-1 p-1 bg-slate-900 border border-slate-800 rounded-xl">
+          <div className={`grid grid-cols-3 gap-1 p-1 border rounded-xl ${
+            isLight ? 'bg-slate-200/80 border-slate-300' : 'bg-slate-900 border-slate-800'
+          }`}>
             <button
               onClick={() => setPlatformGuide('pc')}
               className={`py-2 text-[11px] font-bold rounded-lg transition flex flex-col items-center gap-1 cursor-pointer ${
-                activePlatformGuide === 'pc' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                activePlatformGuide === 'pc'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : isLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-300/50'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               <Monitor className="w-3.5 h-3.5" /> PC
@@ -68,7 +76,11 @@ export const DocsView: React.FC = () => {
             <button
               onClick={() => setPlatformGuide('android')}
               className={`py-2 text-[11px] font-bold rounded-lg transition flex flex-col items-center gap-1 cursor-pointer ${
-                activePlatformGuide === 'android' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                activePlatformGuide === 'android'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : isLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-300/50'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" /> Android
@@ -76,7 +88,11 @@ export const DocsView: React.FC = () => {
             <button
               onClick={() => setPlatformGuide('extension')}
               className={`py-2 text-[11px] font-bold rounded-lg transition flex flex-col items-center gap-1 cursor-pointer ${
-                activePlatformGuide === 'extension' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                activePlatformGuide === 'extension'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : isLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-300/50'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               <Puzzle className="w-3.5 h-3.5" /> Extension
@@ -101,12 +117,24 @@ export const DocsView: React.FC = () => {
                 onClick={() => setGuideStep(s.step)}
                 className={`w-full text-left p-3 rounded-2xl border transition flex flex-col gap-1 cursor-pointer ${
                   activeGuideStep === s.step
-                    ? 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    ? isLight
+                      ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-sm'
+                      : 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    : isLight
+                    ? 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100 shadow-xs'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/60'
                 }`}
               >
-                <span className="text-xs font-bold text-slate-200">{s.title}</span>
-                <span className="text-[10px] opacity-80">{s.desc}</span>
+                <span className={`text-xs font-bold ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-900 font-extrabold' : 'text-cyan-300'
+                    : isLight ? 'text-slate-800' : 'text-slate-200'
+                }`}>{s.title}</span>
+                <span className={`text-[10px] ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-700 font-medium' : 'text-cyan-400/80'
+                    : isLight ? 'text-slate-500' : 'opacity-80'
+                }`}>{s.desc}</span>
               </button>
             ))}
 
@@ -121,12 +149,24 @@ export const DocsView: React.FC = () => {
                 onClick={() => setGuideStep(s.step)}
                 className={`w-full text-left p-3 rounded-2xl border transition flex flex-col gap-1 cursor-pointer ${
                   activeGuideStep === s.step
-                    ? 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    ? isLight
+                      ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-sm'
+                      : 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    : isLight
+                    ? 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100 shadow-xs'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/60'
                 }`}
               >
-                <span className="text-xs font-bold text-slate-200">{s.title}</span>
-                <span className="text-[10px] opacity-80">{s.desc}</span>
+                <span className={`text-xs font-bold ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-900 font-extrabold' : 'text-cyan-300'
+                    : isLight ? 'text-slate-800' : 'text-slate-200'
+                }`}>{s.title}</span>
+                <span className={`text-[10px] ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-700 font-medium' : 'text-cyan-400/80'
+                    : isLight ? 'text-slate-500' : 'opacity-80'
+                }`}>{s.desc}</span>
               </button>
             ))}
 
@@ -141,12 +181,24 @@ export const DocsView: React.FC = () => {
                 onClick={() => setGuideStep(s.step)}
                 className={`w-full text-left p-3 rounded-2xl border transition flex flex-col gap-1 cursor-pointer ${
                   activeGuideStep === s.step
-                    ? 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    ? isLight
+                      ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-sm'
+                      : 'bg-blue-900/30 border-cyan-400 text-cyan-300 shadow-lg'
+                    : isLight
+                    ? 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100 shadow-xs'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/60'
                 }`}
               >
-                <span className="text-xs font-bold text-slate-200">{s.title}</span>
-                <span className="text-[10px] opacity-80">{s.desc}</span>
+                <span className={`text-xs font-bold ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-900 font-extrabold' : 'text-cyan-300'
+                    : isLight ? 'text-slate-800' : 'text-slate-200'
+                }`}>{s.title}</span>
+                <span className={`text-[10px] ${
+                  activeGuideStep === s.step
+                    ? isLight ? 'text-blue-700 font-medium' : 'text-cyan-400/80'
+                    : isLight ? 'text-slate-500' : 'opacity-80'
+                }`}>{s.desc}</span>
               </button>
             ))}
         </div>
@@ -404,7 +456,7 @@ export const DocsView: React.FC = () => {
                   <label className="text-[10px] text-slate-400 font-bold">Username</label>
                   <input
                     type="text"
-                    value="gio-stealth"
+                    value="sec-operator"
                     readOnly
                     className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"
                   />

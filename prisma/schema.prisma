@@ -1,7 +1,7 @@
 // Skema Basis Data PostgreSQL & Prisma ORM 7
 // Produk: Stealth Password Vault (web-password-stealth-vault)
 // Modul 6 Praktikum Pengembangan Aplikasi Web
-// Mahasiswa: Gionaldo Chandrawansah (105224031)
+// Lingkungan Demo: Enterprise Stealth Security Lab
 
 generator client {
   provider = "prisma-client"

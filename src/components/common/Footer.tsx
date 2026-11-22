@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
           <span>Stealth Password Vault v1.0 Finale &copy; 2026</span>
         </div>
         <div>
-          <span>Built for Universitis Pertamina - PAW Practicum</span>
+          <span>Enterprise Stealth Vault &bull; Security Operations Lab</span>
         </div>
       </div>
     </footer>

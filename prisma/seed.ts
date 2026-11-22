@@ -8,29 +8,24 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
+  // Bersihkan data lama untuk memastikan database bersih dari data riil / pribadi
+  await prisma.auditLog.deleteMany({});
+  await prisma.vaultCredential.deleteMany({});
+
   for (const data of dataAwal) {
-    // 1. Upsert VaultCredential (idempotent berdasarkan service unik)
-    const credential = await prisma.vaultCredential.upsert({
-      where: { service: data.service },
-      update: {},
-      create: data,
+    // 1. Buat VaultCredential demo enterprise
+    const credential = await prisma.vaultCredential.create({
+      data,
     });
 
-    // 2. Upsert AuditLog terkait (idempotent berdasarkan credentialId & deviceId)
-    await prisma.auditLog.upsert({
-      where: {
-        credentialId_deviceId: {
-          credentialId: credential.id,
-          deviceId: "PC-STEALTH-MASTER-01",
-        },
-      },
-      update: {},
-      create: {
+    // 2. Buat AuditLog awal terkait
+    await prisma.auditLog.create({
+      data: {
         credentialId: credential.id,
-        deviceId: "PC-STEALTH-MASTER-01",
+        deviceId: "PC-SEC-OPS-01",
         action: "PROVISION_SEED",
         securityRate: 5,
-        details: "Audit awal integritas enkripsi kredensial AES-256-GCM valid.",
+        details: "Audit awal integritas enkripsi kredensial AES-256-GCM terverifikasi valid.",
       },
     });
   }
