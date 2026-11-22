@@ -12,10 +12,13 @@ interface SandboxStore {
   activeTab: TabType;
   themeMode: ThemeMode;
   snowfallEnabled: boolean;
+  bootCompleted: boolean;
   setActiveTab: (tab: TabType) => void;
   setThemeMode: (mode: ThemeMode) => void;
   toggleSnowfall: () => void;
   setSnowfallEnabled: (val: boolean) => void;
+  triggerBootSequence: () => void;
+  setBootCompleted: (val: boolean) => void;
 
   // Lab State
   selectedLab: LabScenario;
@@ -84,10 +87,13 @@ export const useSandboxStore = create<SandboxStore>((set, get) => ({
   activeTab: 'home',
   themeMode: 'dark',
   snowfallEnabled: true,
+  bootCompleted: false,
   setActiveTab: (tab) => set({ activeTab: tab }),
   setThemeMode: (mode) => set({ themeMode: mode }),
   toggleSnowfall: () => set((state) => ({ snowfallEnabled: !state.snowfallEnabled })),
   setSnowfallEnabled: (val) => set({ snowfallEnabled: val }),
+  triggerBootSequence: () => set({ bootCompleted: false }),
+  setBootCompleted: (val) => set({ bootCompleted: val }),
 
   // Lab State
   selectedLab: LAB_SCENARIOS[0],

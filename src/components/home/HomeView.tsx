@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, BookOpen, Flame, Command, Cpu, Wifi, ArrowRight } from 'lucide-react';
+import { Sparkles, BookOpen, Flame, Command, Cpu, Wifi, ArrowRight, Terminal } from 'lucide-react';
 import { StealthVaultLogo } from '@/components/common/StealthVaultLogo';
 import { StickmanHomeHero } from '@/components/stickman/StickmanHomeHero';
 import { useSandboxStore } from '@/stores/useSandboxStore';
 
 export const HomeView: React.FC = () => {
-  const { setActiveTab, setPlatformGuide, setGuideStep, themeMode } = useSandboxStore();
+  const { setActiveTab, setPlatformGuide, setGuideStep, themeMode, triggerBootSequence } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   return (
@@ -51,15 +51,22 @@ export const HomeView: React.FC = () => {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2 w-full">
           <button
             onClick={() => setActiveTab('docs')}
-            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-xl shadow-cyan-950/40 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-xl shadow-cyan-950/40 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
           >
             <BookOpen className="w-4 h-4 stroke-[2.5]" /> Pelajari Guidebook
           </button>
           <button
             onClick={() => setActiveTab('lab')}
-            className="w-full sm:w-auto px-6 py-3 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-5 py-3 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95 shadow-md"
           >
             <Flame className="w-4 h-4 text-cyan-400" /> Buka Interactive Lab (THM)
+          </button>
+          <button
+            onClick={triggerBootSequence}
+            className="w-full sm:w-auto px-4 py-3 bg-cyan-950/40 hover:bg-cyan-900/40 text-cyan-300 border border-cyan-500/30 font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95 shadow-md"
+            title="Tampilkan ulang animasi booting matriks 01/10 perakit gambar vault"
+          >
+            <Terminal className="w-4 h-4 text-cyan-400 animate-pulse" /> Matriks 01/10 Loader
           </button>
         </div>
       </div>
@@ -67,7 +74,7 @@ export const HomeView: React.FC = () => {
       {/* STICKMAN VISUAL ANIMATION SCENARIO */}
       <StickmanHomeHero />
 
-      {/* Quick Feature Interactive Cards */}
+      {/* Quick Feature Interactive Cards (Aurora Gradient) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <button
           onClick={() => {
@@ -75,7 +82,7 @@ export const HomeView: React.FC = () => {
             setGuideStep(2);
             setActiveTab('docs');
           }}
-          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
+          className="text-left card-aurora p-6 space-y-3 relative overflow-hidden group cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
         >
           <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20 w-fit">
             <Command className="w-5 h-5" />
@@ -95,7 +102,7 @@ export const HomeView: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('intro')}
-          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-blue-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
+          className="text-left card-aurora p-6 space-y-3 relative overflow-hidden group cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
         >
           <div className="p-3 bg-blue-500/10 text-blue-400 rounded-2xl border border-blue-500/20 w-fit">
             <Cpu className="w-5 h-5" />
@@ -115,7 +122,7 @@ export const HomeView: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('architecture')}
-          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
+          className="text-left card-aurora p-6 space-y-3 relative overflow-hidden group cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
         >
           <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20 w-fit">
             <Wifi className="w-5 h-5" />

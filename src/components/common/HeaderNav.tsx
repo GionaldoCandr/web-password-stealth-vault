@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database, Sparkles } from 'lucide-react';
+import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database, Sparkles, Terminal } from 'lucide-react';
 import { StealthVaultLogo } from './StealthVaultLogo';
 import { useSandboxStore, TabType, ThemeMode } from '@/stores/useSandboxStore';
 
 export const HeaderNav: React.FC = () => {
-  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault, snowfallEnabled, toggleSnowfall } = useSandboxStore();
+  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault, snowfallEnabled, toggleSnowfall, triggerBootSequence } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode; isAccent?: boolean }[] = [
@@ -101,6 +101,16 @@ export const HeaderNav: React.FC = () => {
           <span className={`w-2 h-2 rounded-full ${ramVault.length > 0 ? 'bg-cyan-400 animate-pulse' : 'bg-slate-600'}`} />
           <span className="whitespace-nowrap">RAM: {ramVault.length} items</span>
         </div>
+
+        {/* Reboot Matrix Decryptor HUD */}
+        <button
+          onClick={triggerBootSequence}
+          className="hidden md:flex items-center gap-1.5 px-2.5 h-8.5 rounded-xl border border-slate-700/60 bg-slate-800/60 hover:bg-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 text-xs transition cursor-pointer shrink-0"
+          title="Putar Ulang Animasi Boot Matriks 01/10 (Dekripsi Gambar Vault)"
+        >
+          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="hidden xl:inline text-[11px] font-mono">Matrix HUD</span>
+        </button>
 
         {/* Cyber Snowfall FX Toggle Button */}
         <button

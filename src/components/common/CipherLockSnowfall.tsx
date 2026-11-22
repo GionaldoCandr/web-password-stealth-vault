@@ -20,12 +20,14 @@ interface Particle {
   morphProgress: number; // 0 -> 1 during transition
   alpha: number;
   maxAlpha: number;
-  colorType: 'cyan' | 'emerald' | 'blue';
+  colorType: 'cyan' | 'emerald' | 'violet' | 'amber';
   rotation: number;
   rotationSpeed: number;
+  fallsToBottom: boolean; // True: travels all the way down past the screen edge!
+  depth: 'foreground' | 'midground' | 'background';
 }
 
-const CIPHER_CHARS = ['0', '1', '7', '9', '3', '8', 'A', 'F', 'X', 'B', 'E', '%', '#', '$', '*', '&'];
+const CIPHER_CHARS = ['0', '1', '0', '1', '01', '10', '7', '9', '3', '8', 'A', 'F', 'X', 'B', 'E', '%', '#', '$', '*', '&'];
 
 export const CipherLockSnowfall: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -45,9 +47,9 @@ export const CipherLockSnowfall: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Mouse coordinates for gentle interactive breeze
-    let mouseX = -1000;
-    let mouseY = -1000;
+    // Interactive pointer coordinates
+    let pointerX = -1000;
+    let pointerY = -1000;
 
     const handleResize = () => {
       if (!canvas) return;
@@ -55,50 +57,94 @@ export const CipherLockSnowfall: React.FC = () => {
       height = canvas.height = window.innerHeight;
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+      if ('touches' in e && e.touches.length > 0) {
+        pointerX = e.touches[0].clientX;
+        pointerY = e.touches[0].clientY;
+      } else if ('clientX' in e) {
+        pointerX = (e as MouseEvent).clientX;
+        pointerY = (e as MouseEvent).clientY;
+      }
     };
 
-    const handleMouseLeave = () => {
-      mouseX = -1000;
-      mouseY = -1000;
+    const handlePointerLeave = () => {
+      pointerX = -1000;
+      pointerY = -1000;
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handlePointerMove);
+    window.addEventListener('touchmove', handlePointerMove, { passive: true });
+    document.addEventListener('mouseleave', handlePointerLeave);
+    window.addEventListener('touchend', handlePointerLeave);
 
-    // Density based on screen size
-    const particleCount = width < 768 ? 22 : 44;
+    // Dynamic density: Mobile ~36, Tablet ~55, Laptop/Desktop ~80
+    const getParticleCount = (w: number) => {
+      if (w < 640) return 36;
+      if (w < 1024) return 55;
+      return 82;
+    };
+
+    const particleCount = getParticleCount(width);
 
     const createParticle = (initialY?: number): Particle => {
       const baseX = Math.random() * width;
-      const size = 11 + Math.random() * 8; // 11px to 19px
+      const depthRand = Math.random();
+      
+      let depth: 'foreground' | 'midground' | 'background';
+      let size: number;
+      let speedY: number;
+      let maxAlpha: number;
+
+      if (depthRand > 0.65) {
+        // Foreground (large, bright, fast, falls boldly)
+        depth = 'foreground';
+        size = 16 + Math.random() * 6; // 16 - 22px
+        speedY = 0.75 + Math.random() * 0.7; // 0.75 - 1.45 px/frame
+        maxAlpha = 0.7 + Math.random() * 0.25; // 0.70 - 0.95
+      } else if (depthRand > 0.3) {
+        // Midground
+        depth = 'midground';
+        size = 12 + Math.random() * 4; // 12 - 16px
+        speedY = 0.5 + Math.random() * 0.45;
+        maxAlpha = 0.5 + Math.random() * 0.25;
+      } else {
+        // Background (small, soft atmospheric drift)
+        depth = 'background';
+        size = 9 + Math.random() * 3; // 9 - 12px
+        speedY = 0.3 + Math.random() * 0.3;
+        maxAlpha = 0.35 + Math.random() * 0.2;
+      }
+
       const colorRand = Math.random();
-      const colorType: 'cyan' | 'emerald' | 'blue' =
-        colorRand > 0.4 ? 'cyan' : colorRand > 0.2 ? 'emerald' : 'blue';
+      const colorType: 'cyan' | 'emerald' | 'violet' | 'amber' =
+        colorRand > 0.5 ? 'cyan' : colorRand > 0.25 ? 'emerald' : colorRand > 0.1 ? 'violet' : 'amber';
+
+      // 50% of all particles will fall all the way to the very bottom of the screen!
+      const fallsToBottom = Math.random() < 0.52;
 
       return {
         x: baseX,
         y: initialY !== undefined ? initialY : Math.random() * height,
         baseX,
-        speedY: 0.35 + Math.random() * 0.65, // slow, gentle snow drift
-        swaySpeed: 0.01 + Math.random() * 0.018,
-        swayAmount: 14 + Math.random() * 26,
+        speedY,
+        swaySpeed: 0.012 + Math.random() * 0.02,
+        swayAmount: 15 + Math.random() * 30,
         angle: Math.random() * Math.PI * 2,
         size,
         char: CIPHER_CHARS[Math.floor(Math.random() * CIPHER_CHARS.length)],
         scrambleTimer: 0,
-        scrambleSpeed: 6 + Math.floor(Math.random() * 8),
-        phase: Math.random() > 0.5 ? 'number' : 'lock',
-        phaseTimer: Math.floor(Math.random() * 120),
+        scrambleSpeed: 5 + Math.floor(Math.random() * 9),
+        phase: Math.random() > 0.45 ? 'number' : 'lock',
+        phaseTimer: Math.floor(Math.random() * 100),
         morphProgress: 0,
         alpha: 0.1 + Math.random() * 0.2,
-        maxAlpha: 0.45 + Math.random() * 0.4, // subtle, not glaring
+        maxAlpha,
         colorType,
-        rotation: (Math.random() - 0.5) * 0.2,
-        rotationSpeed: (Math.random() - 0.5) * 0.005,
+        rotation: (Math.random() - 0.5) * 0.25,
+        rotationSpeed: (Math.random() - 0.5) * 0.006,
+        fallsToBottom,
+        depth,
       };
     };
 
@@ -106,14 +152,14 @@ export const CipherLockSnowfall: React.FC = () => {
       createParticle()
     );
 
-    // Helper: Draw stylized cyber padlock directly with vector canvas path
+    // Draw Vector Padlock
     const drawPadlock = (
       pCtx: CanvasRenderingContext2D,
       x: number,
       y: number,
       size: number,
       alpha: number,
-      colorType: 'cyan' | 'emerald' | 'blue',
+      colorType: 'cyan' | 'emerald' | 'violet' | 'amber',
       morphFactor: number,
       rot: number
     ) => {
@@ -127,66 +173,69 @@ export const CipherLockSnowfall: React.FC = () => {
           ? isLight ? '#0284c7' : '#38bdf8'
           : colorType === 'emerald'
           ? isLight ? '#059669' : '#34d399'
-          : isLight ? '#2563eb' : '#60a5fa';
+          : colorType === 'violet'
+          ? isLight ? '#7c3aed' : '#a78bfa'
+          : isLight ? '#d97706' : '#fbbf24';
 
       const glowColor =
         colorType === 'cyan'
-          ? 'rgba(56, 189, 248, 0.7)'
+          ? 'rgba(56, 189, 248, 0.8)'
           : colorType === 'emerald'
-          ? 'rgba(52, 211, 153, 0.7)'
-          : 'rgba(96, 165, 250, 0.7)';
+          ? 'rgba(52, 211, 153, 0.8)'
+          : colorType === 'violet'
+          ? 'rgba(167, 139, 250, 0.8)'
+          : 'rgba(251, 191, 36, 0.8)';
 
       pCtx.shadowColor = glowColor;
-      pCtx.shadowBlur = 8 * morphFactor;
+      pCtx.shadowBlur = 10 * morphFactor;
 
-      const scale = 0.8 + 0.2 * morphFactor;
+      const scale = 0.85 + 0.15 * morphFactor;
       pCtx.scale(scale, scale);
 
       const w = size * 0.95;
-      const h = size * 0.8;
+      const h = size * 0.82;
       const shackleRadius = w * 0.32;
 
-      // 1. Shackle (Lengkungan Kunci Gembok)
+      // 1. Shackle
       pCtx.beginPath();
-      pCtx.lineWidth = Math.max(1.4, size * 0.16);
+      pCtx.lineWidth = Math.max(1.5, size * 0.17);
       pCtx.strokeStyle = primaryColor;
       pCtx.lineCap = 'round';
-      // Arched shackle
       pCtx.arc(0, -h * 0.38, shackleRadius, Math.PI, 0, false);
       pCtx.lineTo(shackleRadius, -h * 0.08);
       pCtx.stroke();
 
-      // 2. Padlock Body (Badan Gembok Persegi Membulat)
+      // 2. Padlock Body
       pCtx.beginPath();
       const bodyW = w * 0.92;
-      const bodyH = h * 0.72;
-      const radius = 3;
-      pCtx.fillStyle = isLight ? 'rgba(241, 245, 249, 0.95)' : 'rgba(15, 23, 42, 0.85)';
+      const bodyH = h * 0.74;
+      const radius = 3.5;
+      pCtx.fillStyle = isLight ? 'rgba(241, 245, 249, 0.95)' : 'rgba(15, 23, 42, 0.88)';
       pCtx.roundRect(-bodyW / 2, -h * 0.1, bodyW, bodyH, radius);
       pCtx.fill();
 
-      pCtx.lineWidth = 1.2;
+      pCtx.lineWidth = 1.3;
       pCtx.strokeStyle = primaryColor;
       pCtx.stroke();
 
-      // 3. Keyhole (Lubang Kunci Bersinar)
+      // 3. Keyhole Dot & Slot
       pCtx.beginPath();
       pCtx.fillStyle = primaryColor;
-      pCtx.arc(0, h * 0.16, Math.max(1.1, size * 0.09), 0, Math.PI * 2);
+      pCtx.arc(0, h * 0.16, Math.max(1.2, size * 0.095), 0, Math.PI * 2);
       pCtx.fill();
 
       pCtx.beginPath();
-      pCtx.moveTo(-size * 0.045, h * 0.2);
-      pCtx.lineTo(size * 0.045, h * 0.2);
-      pCtx.lineTo(size * 0.07, h * 0.38);
-      pCtx.lineTo(-size * 0.07, h * 0.38);
+      pCtx.moveTo(-size * 0.05, h * 0.2);
+      pCtx.lineTo(size * 0.05, h * 0.2);
+      pCtx.lineTo(size * 0.075, h * 0.4);
+      pCtx.lineTo(-size * 0.075, h * 0.4);
       pCtx.closePath();
       pCtx.fill();
 
       pCtx.restore();
     };
 
-    // Helper: Draw Cipher character
+    // Draw Cipher Character
     const drawCipher = (
       pCtx: CanvasRenderingContext2D,
       x: number,
@@ -194,7 +243,7 @@ export const CipherLockSnowfall: React.FC = () => {
       char: string,
       size: number,
       alpha: number,
-      colorType: 'cyan' | 'emerald' | 'blue',
+      colorType: 'cyan' | 'emerald' | 'violet' | 'amber',
       rot: number
     ) => {
       pCtx.save();
@@ -207,17 +256,21 @@ export const CipherLockSnowfall: React.FC = () => {
           ? isLight ? '#0284c7' : '#38bdf8'
           : colorType === 'emerald'
           ? isLight ? '#059669' : '#34d399'
-          : isLight ? '#2563eb' : '#60a5fa';
+          : colorType === 'violet'
+          ? isLight ? '#7c3aed' : '#a78bfa'
+          : isLight ? '#d97706' : '#fbbf24';
 
       const glowColor =
         colorType === 'cyan'
-          ? 'rgba(56, 189, 248, 0.6)'
+          ? 'rgba(56, 189, 248, 0.75)'
           : colorType === 'emerald'
-          ? 'rgba(52, 211, 153, 0.6)'
-          : 'rgba(96, 165, 250, 0.6)';
+          ? 'rgba(52, 211, 153, 0.75)'
+          : colorType === 'violet'
+          ? 'rgba(167, 139, 250, 0.75)'
+          : 'rgba(251, 191, 36, 0.75)';
 
       pCtx.shadowColor = glowColor;
-      pCtx.shadowBlur = 6;
+      pCtx.shadowBlur = 8;
       pCtx.font = `bold ${Math.round(size)}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
       pCtx.fillStyle = charColor;
       pCtx.textAlign = 'center';
@@ -232,21 +285,21 @@ export const CipherLockSnowfall: React.FC = () => {
       ctx.clearRect(0, 0, width, height);
 
       particles.forEach((p) => {
-        // Fall down
+        // Fall down velocity
         p.y += p.speedY;
         p.angle += p.swaySpeed;
         p.rotation += p.rotationSpeed;
 
-        // Sine wave swaying left and right
+        // Gentle horizontal sway
         p.x = p.baseX + Math.sin(p.angle) * p.swayAmount;
 
-        // Subtle interactive mouse repulsion
-        const dx = p.x - mouseX;
-        const dy = p.y - mouseY;
+        // Pointer repulsion (mouse or mobile touch)
+        const dx = p.x - pointerX;
+        const dy = p.y - pointerY;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 90) {
-          const force = (90 - dist) / 90;
-          p.baseX += (dx / (dist || 1)) * force * 1.5;
+        if (dist < 100) {
+          const force = (100 - dist) / 100;
+          p.baseX += (dx / (dist || 1)) * force * 2;
         }
 
         // Cipher scrambling timer
@@ -256,32 +309,27 @@ export const CipherLockSnowfall: React.FC = () => {
           p.char = CIPHER_CHARS[Math.floor(Math.random() * CIPHER_CHARS.length)];
         }
 
-        // State Machine Lifecycle:
-        // 1. 'number': drifts down as scrambled cipher number
-        // 2. 'morph': smoothly transitions into a lock
-        // 3. 'lock': drifts as a glowing padlock
-        // 4. 'fade': dissolves/disappears into background
         p.phaseTimer++;
 
+        // Lifecycle handling
         if (p.phase === 'number') {
-          // Fade in gently as it enters from top
+          // Fade in as it descends from top
           if (p.alpha < p.maxAlpha) {
-            p.alpha = Math.min(p.maxAlpha, p.alpha + 0.015);
+            p.alpha = Math.min(p.maxAlpha, p.alpha + 0.02);
           }
 
           drawCipher(ctx, p.x, p.y, p.char, p.size, p.alpha, p.colorType, p.rotation);
 
-          // After some drift (~100-180 frames), begin morphing into padlock
-          if (p.phaseTimer > 110 + (p.baseX % 70)) {
+          // Transition to morph
+          if (p.phaseTimer > 80 + (p.baseX % 60)) {
             p.phase = 'morph';
             p.phaseTimer = 0;
             p.morphProgress = 0;
           }
         } else if (p.phase === 'morph') {
-          p.morphProgress += 0.04;
+          p.morphProgress += 0.045;
 
-          // Cross-fade between scrambling number and vector padlock
-          const numberAlpha = p.alpha * Math.max(0, 1 - p.morphProgress * 1.3);
+          const numberAlpha = p.alpha * Math.max(0, 1 - p.morphProgress * 1.25);
           const lockAlpha = p.alpha * Math.min(1, p.morphProgress * 1.2);
 
           if (numberAlpha > 0.02) {
@@ -298,23 +346,24 @@ export const CipherLockSnowfall: React.FC = () => {
         } else if (p.phase === 'lock') {
           drawPadlock(ctx, p.x, p.y, p.size, p.alpha, p.colorType, 1, p.rotation);
 
-          // Hold padlock for a while (~90-150 frames), then start fading out
-          if (p.phaseTimer > 100 + (p.baseX % 60)) {
+          // If fallsToBottom is FALSE, fade out mid-screen to create depth
+          if (!p.fallsToBottom && p.phaseTimer > 120 + (p.baseX % 70)) {
             p.phase = 'fade';
           }
+          // If fallsToBottom is TRUE, it stays locked and keeps falling all the way to the bottom!
         } else if (p.phase === 'fade') {
-          p.alpha -= 0.008; // smooth dissolve
+          p.alpha -= 0.007; // Smooth dissolve
           if (p.alpha > 0) {
             drawPadlock(ctx, p.x, p.y, p.size, p.alpha, p.colorType, 1, p.rotation);
           } else {
-            // Reset particle back to the top
-            Object.assign(p, createParticle(-25));
+            // Reset to top
+            Object.assign(p, createParticle(-30));
           }
         }
 
-        // Reset if drifted beyond bottom edge
-        if (p.y > height + 30) {
-          Object.assign(p, createParticle(-25));
+        // Reset when it falls completely past the bottom of the screen (for laptop, tablet, phone)
+        if (p.y > height + 25) {
+          Object.assign(p, createParticle(-30));
         }
       });
 
@@ -326,8 +375,10 @@ export const CipherLockSnowfall: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('touchmove', handlePointerMove);
+      document.removeEventListener('mouseleave', handlePointerLeave);
+      window.removeEventListener('touchend', handlePointerLeave);
     };
   }, [snowfallEnabled, isLight]);
 

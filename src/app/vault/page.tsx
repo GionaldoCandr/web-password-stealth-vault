@@ -162,7 +162,7 @@ export default async function VaultPage() {
                   return (
                     <div
                       key={cred.id}
-                      className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all duration-200 group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg shadow-slate-950/20 backdrop-blur-sm"
+                      className="p-4 rounded-2xl bg-gradient-to-r from-slate-900/80 via-slate-800/70 to-slate-900/80 border border-slate-700/60 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.18)] transition-all duration-300 group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md"
                     >
                       <div className="space-y-1.5 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">

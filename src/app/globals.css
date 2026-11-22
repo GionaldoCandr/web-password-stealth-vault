@@ -112,3 +112,89 @@
 .animate-hacker-sneak {
   animation: hackerSneak 2s ease-in-out infinite;
 }
+
+/* =========================================================================
+   Aurora Gradient & Cyber Stealth UI Enhancements
+   ========================================================================= */
+@keyframes auroraShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+/* Card Aurora: Frosted Glass + Animated Multi-Stop Aurora Gradient Border */
+.card-aurora {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.75) 0%,
+    rgba(20, 31, 56, 0.7) 45%,
+    rgba(15, 23, 42, 0.82) 100%
+  );
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    0 0 20px -5px rgba(6, 182, 212, 0.12);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.card-aurora::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.5),
+    rgba(168, 85, 247, 0.35),
+    rgba(52, 211, 153, 0.45),
+    rgba(59, 130, 246, 0.45)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  background-size: 250% 250%;
+  animation: auroraShift 10s ease infinite;
+  opacity: 0.75;
+  transition: opacity 0.35s ease;
+}
+
+.card-aurora:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 
+    0 20px 40px -12px rgba(0, 0, 0, 0.6),
+    0 0 35px -5px rgba(56, 189, 248, 0.25);
+}
+
+.card-aurora:hover::before {
+  opacity: 1;
+}
+
+/* Subtle Aurora Ambient Radial Backdrop */
+.aurora-bg-sheen {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.06) 0%, transparent 50%);
+}

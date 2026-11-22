@@ -14,7 +14,7 @@ export const StickmanHomeHero: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-6 p-6 rounded-3xl bg-gradient-to-b from-slate-800/80 to-slate-900/90 border border-slate-700/60 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+    <div className="card-aurora w-full max-w-4xl mx-auto my-6 p-6 sm:p-7 relative overflow-hidden">
       {/* Background Cyber Grid effect */}
       <div className="absolute inset-0 bg-[radial-gradient(#0e7490_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
 
