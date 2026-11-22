@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { HeaderNav } from '@/components/common/HeaderNav';
+import { TabTransitionWrapper } from '@/components/common/TabTransitionWrapper';
 import { HomeView } from '@/components/home/HomeView';
 import { IntroView } from '@/components/intro/IntroView';
 import { DocsView } from '@/components/docs/DocsView';
@@ -25,14 +26,16 @@ export default function GuideHubPage() {
       {/* Top Header Navbar */}
       <HeaderNav />
 
-      {/* Main Workspace Tabs */}
-      <main className="flex-1 min-h-0 flex overflow-hidden">
-        {activeTab === 'home' && <HomeView />}
-        {activeTab === 'intro' && <IntroView />}
-        {activeTab === 'docs' && <DocsView />}
-        {activeTab === 'lab' && <LabView />}
-        {activeTab === 'architecture' && <ArchitectureView />}
-        {activeTab === 'curriculum' && <CurriculumView />}
+      {/* Main Workspace Tabs with Smooth Aurora Loading Transition */}
+      <main className="flex-1 min-h-0 flex overflow-hidden relative">
+        <TabTransitionWrapper activeTab={activeTab}>
+          {activeTab === 'home' && <HomeView />}
+          {activeTab === 'intro' && <IntroView />}
+          {activeTab === 'docs' && <DocsView />}
+          {activeTab === 'lab' && <LabView />}
+          {activeTab === 'architecture' && <ArchitectureView />}
+          {activeTab === 'curriculum' && <CurriculumView />}
+        </TabTransitionWrapper>
       </main>
     </div>
   );
