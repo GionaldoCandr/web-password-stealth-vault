@@ -58,13 +58,13 @@ export default async function VaultPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0c1427] text-slate-100 flex flex-col font-sans">
       {/* Header Bar */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="border-b border-slate-700/60 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5 text-xs font-semibold"
+            className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:border-slate-600 transition flex items-center gap-1.5 text-xs font-semibold"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Beranda</span>
@@ -90,11 +90,11 @@ export default async function VaultPage() {
 
         {/* Counter Badge */}
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs flex items-center gap-2 text-slate-300">
+          <div className="px-3 py-1.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-xs flex items-center gap-2 text-slate-300">
             <KeyRound className="w-3.5 h-3.5 text-cyan-400" />
             <span>{credentials.length} Kredensial</span>
           </div>
-          <div className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs flex items-center gap-2 text-slate-300 hidden sm:flex">
+          <div className="px-3 py-1.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-xs flex items-center gap-2 text-slate-300 hidden sm:flex">
             <Activity className="w-3.5 h-3.5 text-amber-400" />
             <span>{totalAuditLogs} Log Audit</span>
           </div>
@@ -146,10 +146,10 @@ export default async function VaultPage() {
             </div>
 
             {credentials.length === 0 ? (
-              <div className="p-12 text-center bg-slate-900/40 border border-slate-800/80 rounded-2xl">
-                <Lock className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-                <h3 className="text-sm font-bold text-slate-300">Belum Ada Kredensial di Basis Data</h3>
-                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              <div className="p-12 text-center bg-slate-800/40 border border-slate-700/60 rounded-2xl backdrop-blur-md">
+                <Lock className="w-10 h-10 text-slate-500 mx-auto mb-3" />
+                <h3 className="text-sm font-bold text-slate-200">Belum Ada Kredensial di Basis Data</h3>
+                <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
                   Gunakan formulir di sebelah kiri untuk menambahkan akun baru atau jalankan <code>npx prisma db seed</code> untuk mengisi data sintetis awal.
                 </p>
               </div>
@@ -162,7 +162,7 @@ export default async function VaultPage() {
                   return (
                     <div
                       key={cred.id}
-                      className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 transition-all duration-200 group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                      className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all duration-200 group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg shadow-slate-950/20 backdrop-blur-sm"
                     >
                       <div className="space-y-1.5 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">

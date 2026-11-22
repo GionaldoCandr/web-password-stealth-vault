@@ -19,7 +19,7 @@ export default function GuideHubPage() {
       className={`h-screen font-sans flex flex-col antialiased transition-colors duration-300 overflow-hidden ${
         isLight
           ? 'bg-slate-50 text-slate-900 selection:bg-cyan-500 selection:text-white'
-          : 'bg-slate-950 text-slate-100 selection:bg-cyan-400 selection:text-slate-950'
+          : 'bg-[#0c1427]/90 text-slate-100 selection:bg-cyan-400 selection:text-slate-950'
       }`}
     >
       {/* Top Header Navbar */}

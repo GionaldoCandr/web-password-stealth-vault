@@ -11,8 +11,8 @@ export const FormTambahCredential: React.FC = () => {
   );
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-      <div className="flex items-center gap-3 mb-5 border-b border-slate-800 pb-4">
+    <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-6 shadow-xl backdrop-blur-md">
+      <div className="flex items-center gap-3 mb-5 border-b border-slate-700/60 pb-4">
         <div className="p-2.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl">
           <PlusCircle className="w-5 h-5" />
         </div>

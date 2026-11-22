@@ -4,8 +4,8 @@ import { ArrowLeft, ShieldAlert } from "lucide-react";
 
 export default function VaultNotFound() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center shadow-2xl">
+    <div className="min-h-screen bg-[#0c1427] text-slate-100 flex flex-col items-center justify-center p-4">
+      <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-2xl p-8 text-center shadow-2xl backdrop-blur-md">
         <div className="w-14 h-14 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <ShieldAlert className="w-8 h-8" />
         </div>

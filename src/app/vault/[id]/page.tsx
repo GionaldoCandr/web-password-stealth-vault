@@ -83,13 +83,13 @@ export default async function DetailCredentialPage({ params }: PageProps) {
   const badge = getCategoryBadge(credential.category);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0c1427] text-slate-100 flex flex-col font-sans">
       {/* Top Header Bar */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="border-b border-slate-700/60 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
             href="/vault"
-            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5 text-xs font-semibold"
+            className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:border-slate-600 transition flex items-center gap-1.5 text-xs font-semibold"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Brankas</span>
@@ -123,7 +123,7 @@ export default async function DetailCredentialPage({ params }: PageProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs flex items-center gap-2 text-slate-300">
+          <div className="px-3 py-1.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-xs flex items-center gap-2 text-slate-300">
             <Activity className="w-3.5 h-3.5 text-blue-400" />
             <span>{credential.auditLogs.length} Entri Log Audit</span>
           </div>
@@ -172,8 +172,8 @@ export default async function DetailCredentialPage({ params }: PageProps) {
             <FormTambahAudit credentialId={credential.id} />
 
             {/* Daftar Log Audit */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-6 shadow-xl backdrop-blur-md">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-700/60">
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4 text-blue-400" />
                   <h3 className="text-sm font-bold text-white">

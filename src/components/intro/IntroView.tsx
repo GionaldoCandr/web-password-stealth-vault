@@ -43,7 +43,7 @@ export const IntroView: React.FC = () => {
           </div>
 
           <div className="space-y-3 text-xs text-slate-300">
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5 shadow-md">
               <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-rose-300 block mb-0.5">Penyimpanan Terbuka di Disk</strong>
@@ -53,7 +53,7 @@ export const IntroView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5 shadow-md">
               <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-rose-300 block mb-0.5">Ketergantungan Server Cloud</strong>
@@ -63,7 +63,7 @@ export const IntroView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-rose-900/40 flex items-start gap-2.5 shadow-md">
               <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-rose-300 block mb-0.5">Jejak Digital Forensik Abadi</strong>
@@ -88,7 +88,7 @@ export const IntroView: React.FC = () => {
           </div>
 
           <div className="space-y-3 text-xs text-slate-300">
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5 shadow-md">
               <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-cyan-300 block mb-0.5">100% Volatile RAM Execution</strong>
@@ -98,7 +98,7 @@ export const IntroView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5 shadow-md">
               <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-cyan-300 block mb-0.5">Enkripsi GCM Berotentikasi (AEAD)</strong>
@@ -108,7 +108,7 @@ export const IntroView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5">
+            <div className="p-3.5 bg-slate-900/80 rounded-xl border border-cyan-900/40 flex items-start gap-2.5 shadow-md">
               <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-cyan-300 block mb-0.5">Sinkronisasi P2P Langsung Lokal</strong>

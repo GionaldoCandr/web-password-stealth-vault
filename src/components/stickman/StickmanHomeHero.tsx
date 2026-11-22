@@ -14,19 +14,19 @@ export const StickmanHomeHero: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-6 p-6 rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-cyan-500/20 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+    <div className="w-full max-w-4xl mx-auto my-6 p-6 rounded-3xl bg-gradient-to-b from-slate-800/80 to-slate-900/90 border border-slate-700/60 shadow-2xl relative overflow-hidden backdrop-blur-xl">
       {/* Background Cyber Grid effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(#083344_1px,transparent_1px)] [background-size:16px_16px] opacity-25 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#0e7490_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
 
       {/* Top Banner Tag */}
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-6">
+      <div className="flex items-center justify-between border-b border-slate-700/60 pb-3 mb-6">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
           <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
             Simulasi Visual: Volatile RAM vs Disk Storage
           </span>
         </div>
-        <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-2.5 py-1 rounded-full border border-slate-800">
+        <span className="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-700/60">
           Animasi Interaktif Konseptual
         </span>
       </div>
@@ -34,7 +34,7 @@ export const StickmanHomeHero: React.FC = () => {
       {/* Interactive Graphic Canvas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         {/* Left: Disk Crawler Infostealer */}
-        <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 relative">
+        <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-900/70 border border-slate-700/60 relative">
           <div className="h-28 flex items-center justify-center">
             <svg width="90" height="100" viewBox="0 0 100 120" className="stroke-rose-400 fill-none stroke-[3.5] stroke-linecap-round stroke-linejoin-round">
               {/* Head */}
@@ -96,7 +96,7 @@ export const StickmanHomeHero: React.FC = () => {
         </div>
 
         {/* Right: Stealth Agent Stickman */}
-        <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 relative">
+        <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-900/70 border border-slate-700/60 relative">
           <div className="h-28 flex items-center justify-center">
             <svg width="90" height="100" viewBox="0 0 100 120" className="stroke-cyan-400 fill-none stroke-[3.5] stroke-linecap-round stroke-linejoin-round">
               {/* Head with Ninja Cyber Visor */}

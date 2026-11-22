@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database } from 'lucide-react';
+import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database, Sparkles } from 'lucide-react';
 import { StealthVaultLogo } from './StealthVaultLogo';
 import { useSandboxStore, TabType, ThemeMode } from '@/stores/useSandboxStore';
 
 export const HeaderNav: React.FC = () => {
-  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault } = useSandboxStore();
+  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault, snowfallEnabled, toggleSnowfall } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode; isAccent?: boolean }[] = [
@@ -22,7 +22,7 @@ export const HeaderNav: React.FC = () => {
   return (
     <header
       className={`sticky top-0 z-50 backdrop-blur-xl border-b px-4 sm:px-6 py-2.5 flex items-center justify-between transition-colors duration-200 ${
-        isLight ? 'bg-white/95 border-slate-200 shadow-sm' : 'bg-slate-950/90 border-slate-800/80 shadow-2xl'
+        isLight ? 'bg-white/95 border-slate-200 shadow-sm' : 'bg-slate-900/80 border-slate-700/60 shadow-xl'
       }`}
     >
       {/* Brand Logo & Title */}
@@ -50,7 +50,7 @@ export const HeaderNav: React.FC = () => {
       <div className="flex items-center gap-2 sm:gap-3 overflow-hidden max-w-full">
         <nav
           className={`flex items-center gap-1 p-1 border rounded-xl overflow-x-auto no-scrollbar shrink ${
-            isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/90 border-slate-800'
+            isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-800/60 border-slate-700/60'
           }`}
         >
           {navItems.map((item) => {
@@ -95,17 +95,31 @@ export const HeaderNav: React.FC = () => {
           className={`hidden xl:flex items-center gap-1.5 px-3 h-8.5 rounded-xl border text-[11px] font-mono shrink-0 ${
             ramVault.length > 0
               ? 'bg-cyan-950/40 border-cyan-500/30 text-cyan-400'
-              : 'bg-slate-900/80 border-slate-800 text-slate-400'
+              : 'bg-slate-800/60 border-slate-700/60 text-slate-400'
           }`}
         >
           <span className={`w-2 h-2 rounded-full ${ramVault.length > 0 ? 'bg-cyan-400 animate-pulse' : 'bg-slate-600'}`} />
           <span className="whitespace-nowrap">RAM: {ramVault.length} items</span>
         </div>
 
+        {/* Cyber Snowfall FX Toggle Button */}
+        <button
+          onClick={toggleSnowfall}
+          className={`flex items-center gap-1.5 px-2.5 h-8.5 rounded-xl border text-xs transition cursor-pointer shrink-0 ${
+            snowfallEnabled
+              ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300 shadow-sm shadow-cyan-500/20'
+              : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200'
+          }`}
+          title={snowfallEnabled ? 'Cyber Snowfall: Aktif (Gembok & Cipher Jatuh). Klik untuk jeda.' : 'Cyber Snowfall: Nonaktif. Klik untuk aktifkan.'}
+        >
+          <Sparkles className={`w-3.5 h-3.5 ${snowfallEnabled ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
+          <span className="hidden lg:inline text-[11px] font-mono font-medium">FX Snowfall</span>
+        </button>
+
         {/* Theme Switcher */}
         <div
           className={`flex items-center p-1 border rounded-xl shrink-0 ${
-            isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/90 border-slate-800'
+            isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-800/60 border-slate-700/60'
           }`}
         >
           <button

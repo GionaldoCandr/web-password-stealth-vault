@@ -75,7 +75,7 @@ export const HomeView: React.FC = () => {
             setGuideStep(2);
             setActiveTab('docs');
           }}
-          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-cyan-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
         >
           <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20 w-fit">
             <Command className="w-5 h-5" />
@@ -95,7 +95,7 @@ export const HomeView: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('intro')}
-          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-blue-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
         >
           <div className="p-3 bg-blue-500/10 text-blue-400 rounded-2xl border border-blue-500/20 w-fit">
             <Cpu className="w-5 h-5" />
@@ -115,7 +115,7 @@ export const HomeView: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('architecture')}
-          className="text-left bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-indigo-500/50 hover:bg-slate-900 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+          className="text-left bg-slate-800/60 border border-slate-700/60 p-6 rounded-3xl space-y-3 relative overflow-hidden group hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-300 backdrop-blur-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-slate-950/30"
         >
           <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20 w-fit">
             <Wifi className="w-5 h-5" />
