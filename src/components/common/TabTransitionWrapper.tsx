@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Cpu } from 'lucide-react';
+import { StickmanShatterRebuilder } from '@/components/stickman/StickmanShatterRebuilder';
 import { StickmanTabOrganizer } from '@/components/stickman/StickmanTabOrganizer';
 import { useSandboxStore } from '@/stores/useSandboxStore';
 
@@ -14,7 +15,7 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
   activeTab,
   children,
 }) => {
-  const { themeMode } = useSandboxStore();
+  const { themeMode, shatterCount } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -22,39 +23,40 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentTranslate, setContentTranslate] = useState(0);
 
-  // Stickman Card Reorganizer State
-  const [stickmanVisible, setStickmanVisible] = useState(false);
-  const [stickmanStep, setStickmanStep] = useState<'scatter' | 'aligning' | 'locked'>('scatter');
+  // Card Shatter & Stickmen Rebuilder Active State
+  const [isShatterActive, setIsShatterActive] = useState(false);
+  const [stickmanHudVisible, setStickmanHudVisible] = useState(false);
+  const [stickmanHudStep, setStickmanHudStep] = useState<'scatter' | 'aligning' | 'locked'>('scatter');
 
   const prevTabRef = useRef(activeTab);
+  const prevShatterCountRef = useRef(shatterCount);
   const contentContainerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (prevTabRef.current === activeTab) return;
-    prevTabRef.current = activeTab;
+  // Trigger function for Shatter & Rebuild sequence
+  const executeShatterRebuildSequence = useCallback(() => {
+    // 1. Begin Tab Telemetry Loading Beam & 2. Activate Stickman Shatter Theatre
+    const tInit = setTimeout(() => {
+      setIsBarVisible(true);
+      setLoadingProgress(15);
+      setContentOpacity(0.5);
+      setContentTranslate(4);
+      setIsShatterActive(true);
+      setStickmanHudVisible(true);
+      setStickmanHudStep('scatter');
+    }, 0);
 
-    // 1. Begin Tab Telemetry Loading Beam
-    setIsBarVisible(true);
-    setLoadingProgress(15);
-    setContentOpacity(0.5);
-    setContentTranslate(6);
-
-    // 2. Launch Stickman Organizer HUD
-    setStickmanVisible(true);
-    setStickmanStep('scatter');
-
-    // 3. Staggered Loading & Stickman Alignment Phase
+    // 3. Staggered Progress and Stickmen Gathering Shards
     const tProgress = setTimeout(() => {
       setLoadingProgress(55);
-      setStickmanStep('aligning');
-    }, 110);
+      setStickmanHudStep('aligning');
+    }, 180);
 
     const tContent = setTimeout(() => {
       setLoadingProgress(85);
       setContentOpacity(1);
       setContentTranslate(0);
 
-      // 4. Viewport-Aware Card Scattering & Snap Assembly
+      // 4. Viewport-Aware Card Shatter & Snap Assembly
       // Operates ONLY on cards currently visible within user's viewport screen to prevent lag
       if (contentContainerRef.current && typeof window !== 'undefined') {
         const container = contentContainerRef.current;
@@ -88,37 +90,41 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
         }
 
         if (visibleCards.length > 0) {
-          // Staggered scatter offsets (berantakan / unaligned drift)
-          const scatterPositions = [
-            { x: -16 * mult, y: -10 * mult, rot: -3.5 * mult },
-            { x: 18 * mult, y: 12 * mult, rot: 4.0 * mult },
-            { x: -12 * mult, y: 14 * mult, rot: -2.6 * mult },
-            { x: 15 * mult, y: -13 * mult, rot: 3.1 * mult },
-            { x: -9 * mult, y: -15 * mult, rot: -1.9 * mult },
-            { x: 11 * mult, y: 11 * mult, rot: 2.3 * mult },
+          // Staggered scatter offsets (efek hancur berantakan seperti pecahan puzzle)
+          const shatterPresets = [
+            { x: -22 * mult, y: -14 * mult, rot: -5.5 * mult },
+            { x: 24 * mult, y: 16 * mult, rot: 6.2 * mult },
+            { x: -16 * mult, y: 18 * mult, rot: -4.0 * mult },
+            { x: 20 * mult, y: -18 * mult, rot: 4.8 * mult },
+            { x: -12 * mult, y: -20 * mult, rot: -3.2 * mult },
+            { x: 15 * mult, y: 14 * mult, rot: 3.5 * mult },
           ];
 
-          // A. Set instantaneous scattered pose
+          // A. Set instantaneous shattered pose with neon fracture outline
           visibleCards.forEach((card, idx) => {
-            const p = scatterPositions[idx % scatterPositions.length];
-            card.style.willChange = 'transform, opacity';
+            const p = shatterPresets[idx % shatterPresets.length];
+            card.style.willChange = 'transform, opacity, filter, box-shadow';
             card.style.transition = 'none';
             card.style.transform = `translate3d(${p.x}px, ${p.y}px, 0px) rotate(${p.rot}deg)`;
-            card.style.opacity = '0.75';
+            card.style.opacity = '0.7';
+            card.style.boxShadow = isLight
+              ? '0 10px 25px -5px rgba(2, 132, 199, 0.35)'
+              : '0 10px 30px -5px rgba(56, 189, 248, 0.45)';
           });
 
           // Force reflow
           void container.offsetHeight;
 
-          // B. Snap cards into neat alignment with elastic cyber ease
-          requestAnimationFrame(() => {
+          // B. Snap cards into neat alignment as stickmen weld them together
+          setTimeout(() => {
             visibleCards.forEach((card, idx) => {
-              const delay = idx * 45; // subtle wave snap
-              card.style.transition = `transform 480ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity 420ms ease ${delay}ms`;
+              const delay = idx * 40; // wave snap
+              card.style.transition = `transform 480ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity 420ms ease ${delay}ms, box-shadow 450ms ease ${delay}ms`;
               card.style.transform = 'translate3d(0, 0, 0) rotate(0deg) scale(1)';
               card.style.opacity = '1';
+              card.style.boxShadow = '';
             });
-          });
+          }, 240);
 
           // C. Complete cleanup after animation ends (frees memory and resets DOM to zero overhead)
           setTimeout(() => {
@@ -127,8 +133,9 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
               card.style.transition = '';
               card.style.transform = '';
               card.style.opacity = '';
+              card.style.boxShadow = '';
             });
-          }, 720);
+          }, 850);
         }
       }
     }, 200);
@@ -136,34 +143,49 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
     // 5. Stickman "Locked & Aligned" Victory Pose
     const tLocked = setTimeout(() => {
       setLoadingProgress(100);
-      setStickmanStep('locked');
-    }, 450);
+      setStickmanHudStep('locked');
+    }, 480);
 
     // 6. Dismiss Loading Bar
     const tDismissBar = setTimeout(() => {
       setIsBarVisible(false);
       setLoadingProgress(0);
-    }, 580);
+    }, 620);
 
-    // 7. Dismiss Stickman Organizer
-    const tDismissStickman = setTimeout(() => {
-      setStickmanVisible(false);
-    }, 980);
+    // 7. Dismiss Stickman HUD
+    const tDismissHud = setTimeout(() => {
+      setStickmanHudVisible(false);
+    }, 1150);
 
     return () => {
+      clearTimeout(tInit);
       clearTimeout(tProgress);
       clearTimeout(tContent);
       clearTimeout(tLocked);
       clearTimeout(tDismissBar);
-      clearTimeout(tDismissStickman);
+      clearTimeout(tDismissHud);
     };
-  }, [activeTab]);
+  }, [isLight]);
+
+  // Run on activeTab change
+  useEffect(() => {
+    if (prevTabRef.current === activeTab) return;
+    prevTabRef.current = activeTab;
+    return executeShatterRebuildSequence();
+  }, [activeTab, executeShatterRebuildSequence]);
+
+  // Run on explicit triggerShatterRebuild call
+  useEffect(() => {
+    if (shatterCount === 0 || prevShatterCountRef.current === shatterCount) return;
+    prevShatterCountRef.current = shatterCount;
+    return executeShatterRebuildSequence();
+  }, [shatterCount, executeShatterRebuildSequence]);
 
   return (
     <div className="relative flex-1 flex flex-col min-h-0 overflow-hidden w-full">
       {/* Sleek Cyber Tab Loading Bar ("Mengisi Load") */}
       {isBarVisible && (
-        <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none">
+        <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
           {/* Main glowing progress beam */}
           <div className="relative h-[2.5px] w-full bg-slate-900/60 overflow-hidden backdrop-blur-sm">
             <div
@@ -187,7 +209,7 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
           >
             <span className="flex items-center gap-1.5">
               <Cpu className="w-3 h-3 text-cyan-500 animate-spin [animation-duration:4s]" />
-              MEM_HEAP: DECRYPTING &amp; ORGANIZING [{activeTab.toUpperCase()}]...
+              MEM_HEAP: RECONSTRUCTING &amp; WELDING [{activeTab.toUpperCase()}]...
             </span>
             <span className={`font-bold ${isLight ? 'text-cyan-800' : 'text-cyan-400'}`}>
               {loadingProgress}%
@@ -196,7 +218,7 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
         </div>
       )}
 
-      {/* Tab Content Container with Screen-Aware Modular Snap */}
+      {/* Main Tab Content Container */}
       <div
         ref={contentContainerRef}
         className="flex-1 flex flex-col min-h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -208,11 +230,22 @@ export const TabTransitionWrapper: React.FC<TabTransitionWrapperProps> = ({
         {children}
       </div>
 
-      {/* Floating Stickman Card Organizer HUD */}
-      <StickmanTabOrganizer
-        isVisible={stickmanVisible}
+      {/* =========================================================
+          THE FULL CARD SHATTER & STICKMEN REBUILD THEATER
+          Visual: Card hancur -> stickman pungut -> susun & las rapi
+          ========================================================= */}
+      <StickmanShatterRebuilder
+        isActive={isShatterActive}
         activeTab={activeTab}
-        step={stickmanStep}
+        isLight={isLight}
+        onFinish={() => setIsShatterActive(false)}
+      />
+
+      {/* Floating Stickman Card Organizer HUD Status in bottom right */}
+      <StickmanTabOrganizer
+        isVisible={stickmanHudVisible}
+        activeTab={activeTab}
+        step={stickmanHudStep}
         isLight={isLight}
       />
     </div>

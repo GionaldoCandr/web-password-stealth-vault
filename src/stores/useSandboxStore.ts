@@ -19,6 +19,8 @@ interface SandboxStore {
   setSnowfallEnabled: (val: boolean) => void;
   triggerBootSequence: () => void;
   setBootCompleted: (val: boolean) => void;
+  shatterCount: number;
+  triggerShatterRebuild: () => void;
 
   // Lab State
   selectedLab: LabScenario;
@@ -94,6 +96,8 @@ export const useSandboxStore = create<SandboxStore>((set, get) => ({
   setSnowfallEnabled: (val) => set({ snowfallEnabled: val }),
   triggerBootSequence: () => set({ bootCompleted: false }),
   setBootCompleted: (val) => set({ bootCompleted: val }),
+  shatterCount: 0,
+  triggerShatterRebuild: () => set((state) => ({ shatterCount: state.shatterCount + 1 })),
 
   // Lab State
   selectedLab: LAB_SCENARIOS[0],

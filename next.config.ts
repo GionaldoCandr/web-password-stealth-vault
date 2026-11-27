@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    // @ts-ignore
+    // @ts-expect-error Next.js agent upgrade flag
     agentUpgrade: "security",
   },
 };

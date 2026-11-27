@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSandboxStore } from '@/stores/useSandboxStore';
 import { StealthVaultLogo } from './StealthVaultLogo';
-import { Shield, Lock, Terminal, Cpu, CheckCircle2 } from 'lucide-react';
+import { Lock, Terminal, Cpu } from 'lucide-react';
 
 const BINARY_STREAMS = [
   '01 10 11 00 10 01 10 11 00 01 11 10',
@@ -33,6 +33,16 @@ export const CyberBootLoader: React.FC = () => {
   // Total 9 tiles (3x3 grid) for assembling the logo image
   const totalTiles = 9;
 
+  const skipBoot = useCallback(() => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setBootCompleted(true);
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('stealth_vault_booted', 'true');
+      }
+    }, 200);
+  }, [setBootCompleted]);
+
   useEffect(() => {
     // Check session storage so it doesn't repeatedly flash on route transitions
     // unless triggered manually
@@ -41,9 +51,11 @@ export const CyberBootLoader: React.FC = () => {
       return;
     }
 
-    setProgress(0);
-    setAssembledTiles([]);
-    setIsFadingOut(false);
+    const resetTimer = setTimeout(() => {
+      setProgress(0);
+      setAssembledTiles([]);
+      setIsFadingOut(false);
+    }, 0);
 
     // Staggered progressive assembly
     const tileInterval = setInterval(() => {
@@ -82,12 +94,13 @@ export const CyberBootLoader: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      clearTimeout(resetTimer);
       clearInterval(tileInterval);
       clearInterval(progressInterval);
       clearInterval(logInterval);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [bootCompleted]);
+  }, [bootCompleted, skipBoot]);
 
   // When all 9 tiles are assembled and progress reaches 100%
   useEffect(() => {
@@ -105,16 +118,6 @@ export const CyberBootLoader: React.FC = () => {
       return () => clearTimeout(exitTimer);
     }
   }, [assembledTiles, progress, setBootCompleted]);
-
-  const skipBoot = () => {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      setBootCompleted(true);
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('stealth_vault_booted', 'true');
-      }
-    }, 200);
-  };
 
   if (bootCompleted) return null;
 

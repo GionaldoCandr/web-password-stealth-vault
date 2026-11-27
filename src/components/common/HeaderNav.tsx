@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database, Sparkles, Terminal } from 'lucide-react';
+import { Home as HomeIcon, Info, BookOpen, Flame, Layers, Moon, Sun, Laptop, GraduationCap, Database, Sparkles, Terminal, Hammer } from 'lucide-react';
 import { StealthVaultLogo } from './StealthVaultLogo';
 import { useSandboxStore, TabType, ThemeMode } from '@/stores/useSandboxStore';
 
 export const HeaderNav: React.FC = () => {
-  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault, snowfallEnabled, toggleSnowfall, triggerBootSequence } = useSandboxStore();
+  const { activeTab, setActiveTab, themeMode, setThemeMode, ramVault, snowfallEnabled, toggleSnowfall, triggerBootSequence, triggerShatterRebuild } = useSandboxStore();
   const isLight = themeMode === 'light';
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode; isAccent?: boolean }[] = [
@@ -160,6 +160,20 @@ export const HeaderNav: React.FC = () => {
         >
           <Sparkles className={`w-3.5 h-3.5 ${snowfallEnabled ? (isLight ? 'text-cyan-700 animate-pulse' : 'text-cyan-400 animate-pulse') : 'text-slate-400'}`} />
           <span className="hidden lg:inline text-[11px] font-mono font-medium">FX Snowfall</span>
+        </button>
+
+        {/* Stickman Card Shatter & Rebuild Test Button */}
+        <button
+          onClick={triggerShatterRebuild}
+          className={`hidden sm:flex items-center gap-1.5 px-2.5 h-8.5 rounded-xl border text-xs transition cursor-pointer shrink-0 ${
+            isLight
+              ? 'bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100 shadow-xs'
+              : 'bg-amber-950/40 border-amber-500/40 text-amber-300 hover:bg-amber-900/40 shadow-sm'
+          }`}
+          title="Putar Ulang Animasi: Kartu Hancur Berantakan lalu Dipungut & Disusun Ulang oleh Tim Stickman"
+        >
+          <Hammer className={`w-3.5 h-3.5 ${isLight ? 'text-amber-700' : 'text-amber-400'}`} />
+          <span className="hidden xl:inline text-[11px] font-mono">Rebuild FX</span>
         </button>
 
         {/* Theme Switcher */}
