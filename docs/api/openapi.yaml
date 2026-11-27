@@ -1,0 +1,397 @@
+openapi: 3.1.0
+info:
+  title: Stealth Password Vault API
+  version: 0.3.0
+  description: >
+    RESTful API untuk produk Stealth Password Vault (Manajemen Kredensial Terenkripsi
+    dan Jejak Audit Keamanan Perangkat). Seluruh respons galat mengikuti standar
+    Problem Details RFC 9457 (application/problem+json).
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Server pengembangan lokal Next.js
+security: [] # API Modul 8 belum memakai autentikasi; autentikasi session/RBAC dipasang pada Modul 10
+tags:
+  - name: Credentials
+    description: Pengelolaan kredensial terenkripsi (VaultCredential)
+  - name: AuditLogs
+    description: Pengelolaan riwayat jejak audit perangkat berelasi 1:N (AuditLog)
+paths:
+  /credentials:
+    get:
+      tags: [Credentials]
+      summary: Daftar kredensial dengan paginasi
+      description: Mengambil daftar kredensial terenkripsi dengan dukungan paginasi dan penyaringan kategori.
+      operationId: daftarCredential
+      parameters:
+        - name: halaman
+          in: query
+          description: Nomor halaman yang diambil (dimulai dari 1).
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: batas
+          in: query
+          description: Jumlah item per halaman (maksimum 50).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: kategori
+          in: query
+          description: Filter opsional berdasarkan kategori brankas.
+          schema:
+            $ref: "#/components/schemas/KategoriVault"
+      responses:
+        "200":
+          description: Satu halaman daftar kredensial beserta metadata paginasi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HalamanCredential"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+    post:
+      tags: [Credentials]
+      summary: Membuat kredensial baru
+      description: Menambahkan entri kredensial terenkripsi baru ke PostgreSQL setelah validasi Zod 4.
+      operationId: buatCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CredentialBaru"
+      responses:
+        "201":
+          description: Kredensial berhasil dibuat
+          headers:
+            Location:
+              description: URL resource kredensial baru yang dibuat
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credential"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+  /credentials/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdCredential"
+    get:
+      tags: [Credentials]
+      summary: Detail satu kredensial
+      description: Mengambil detail satu kredensial berdasarkan ID bilangan bulat positif.
+      operationId: ambilCredential
+      responses:
+        "200":
+          description: Kredensial ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credential"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+    patch:
+      tags: [Credentials]
+      summary: Mengubah sebagian field kredensial
+      description: Memperbarui satu atau lebih field pada kredensial tertentu; body kosong {} ditolak dengan 422.
+      operationId: ubahCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CredentialUbah"
+      responses:
+        "200":
+          description: Kredensial berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credential"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+    delete:
+      tags: [Credentials]
+      summary: Menghapus kredensial
+      description: Menghapus kredensial apabila tidak memiliki relasi AuditLog aktif (kebijakan onDelete Restrict -> 409 Conflict).
+      operationId: hapusCredential
+      responses:
+        "204":
+          description: Kredensial berhasil dihapus tanpa body respons
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+  /credentials/{id}/audit-logs:
+    parameters:
+      - $ref: "#/components/parameters/IdCredential"
+    get:
+      tags: [AuditLogs]
+      summary: Daftar log audit kredensial
+      description: Mengambil daftar catatan log audit perangkat untuk satu kredensial secara urut terbaru.
+      operationId: daftarAuditLogCredential
+      responses:
+        "200":
+          description: Daftar catatan audit berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DaftarAuditLog"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+    post:
+      tags: [AuditLogs]
+      summary: Mencatat log audit baru pada kredensial
+      description: Menambahkan catatan audit keamanan perangkat untuk kredensial tertentu (unik per pasangan credentialId dan deviceId).
+      operationId: buatAuditLogCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditLogBaru"
+      responses:
+        "201":
+          description: Log audit berhasil dicatat
+          headers:
+            Location:
+              description: URL resource daftar log audit kredensial terkait
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditLog"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "500":
+          $ref: "#/components/responses/Problem"
+components:
+  parameters:
+    IdCredential:
+      name: id
+      in: path
+      required: true
+      description: ID numerik unik milik VaultCredential (bilangan bulat positif).
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    KategoriVault:
+      type: string
+      enum: [campus, finance, work, social]
+    CredentialBaru:
+      type: object
+      required: [service, category, username, encryptedSecret]
+      properties:
+        service:
+          type: string
+          minLength: 3
+          maxLength: 100
+        category:
+          $ref: "#/components/schemas/KategoriVault"
+        username:
+          type: string
+          minLength: 3
+          maxLength: 80
+        encryptedSecret:
+          type: string
+          minLength: 8
+          maxLength: 512
+        isActive:
+          type: boolean
+          default: true
+        notes:
+          type: string
+          maxLength: 500
+    CredentialUbah:
+      type: object
+      minProperties: 1
+      properties:
+        service:
+          type: string
+          minLength: 3
+          maxLength: 100
+        category:
+          $ref: "#/components/schemas/KategoriVault"
+        username:
+          type: string
+          minLength: 3
+          maxLength: 80
+        encryptedSecret:
+          type: string
+          minLength: 8
+          maxLength: 512
+        isActive:
+          type: boolean
+        notes:
+          type: string
+          maxLength: 500
+    Credential:
+      type: object
+      required:
+        - id
+        - service
+        - category
+        - username
+        - encryptedSecret
+        - isActive
+        - createdAt
+      properties:
+        id:
+          type: integer
+        service:
+          type: string
+          minLength: 3
+          maxLength: 100
+        category:
+          $ref: "#/components/schemas/KategoriVault"
+        username:
+          type: string
+          minLength: 3
+          maxLength: 80
+        encryptedSecret:
+          type: string
+          minLength: 8
+          maxLength: 512
+        isActive:
+          type: boolean
+        notes:
+          type: ["string", "null"]
+          maxLength: 500
+        createdAt:
+          type: string
+          format: date-time
+    HalamanCredential:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Credential"
+        meta:
+          type: object
+          required: [halaman, batas, total]
+          properties:
+            halaman:
+              type: integer
+              minimum: 1
+            batas:
+              type: integer
+              minimum: 1
+              maximum: 50
+            total:
+              type: integer
+              minimum: 0
+    AuditLogBaru:
+      type: object
+      required: [deviceId, action, securityRate, details]
+      properties:
+        deviceId:
+          type: string
+          minLength: 3
+          maxLength: 50
+        action:
+          type: string
+          minLength: 2
+          maxLength: 60
+        securityRate:
+          type: integer
+          minimum: 1
+          maximum: 5
+        details:
+          type: string
+          minLength: 5
+          maxLength: 500
+    AuditLog:
+      allOf:
+        - $ref: "#/components/schemas/AuditLogBaru"
+        - type: object
+          required: [id, credentialId, createdAt]
+          properties:
+            id:
+              type: integer
+            credentialId:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+    DaftarAuditLog:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditLog"
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          default: about:blank
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+  responses:
+    Problem:
+      description: Galat dalam format Problem Details (RFC 9457)
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"

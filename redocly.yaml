@@ -1,0 +1,6 @@
+# Konfigurasi Redocly CLI untuk validasi kontrak OpenAPI 3.1 (Modul 8)
+extends:
+  - recommended
+rules:
+  # Server lokal memang dipakai selama pengembangan & praktikum
+  no-server-example.com: off

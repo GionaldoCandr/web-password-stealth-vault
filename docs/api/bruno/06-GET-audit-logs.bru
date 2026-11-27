@@ -1,0 +1,16 @@
+meta {
+  name: 06 - GET Nested Audit Logs (200)
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:3000/api/v1/credentials/13/audit-logs
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.data: isArray
+}
